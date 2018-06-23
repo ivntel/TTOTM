@@ -43,7 +43,7 @@ public class MainFragment extends Fragment {
     private User user;
     private Calendar mMyCalendar = Calendar.getInstance();
     private Calendar mCurrentDay = Calendar.getInstance();
-    CalanderFragment mCalanderFragment;
+    //CalanderFragment mCalanderFragment = new CalanderFragment();
     private MainActivityViewModel mainActivityViewModel;
     DatePickerDialog.OnDateSetListener mDate;
     Date mDateSelected = new Date();
@@ -68,7 +68,6 @@ public class MainFragment extends Fragment {
         mCycleLength = mView.findViewById(R.id.cycleLength);
         mSubmitButton = mView.findViewById(R.id.submit);
 
-        mCalanderFragment = new CalanderFragment();
         // Note: Db references should not be in an activity.
         mDb = AppDatabase.getInMemoryDatabase(getContext());
 
@@ -164,7 +163,7 @@ public class MainFragment extends Fragment {
                     mDateSelected = dateFormat.parse(users.get(0).date);
                     mEstimatedDate = dateFormat.parse(users.get(0).estimatedStartDate);
                     //ui changes
-                    mDateTextView.setText("DATE THE LAST PERIOD BEGAN:\n" + /*users.get(0).date*/sdf.format(mDateSelected) + "\n\nESTIMATED START DATE OF THE NEXT PERIOUD:\n" + sdf.format(mEstimatedDate) + "\n\nIF THE LATEST PERIOD HAS COME CLICK THE CALENDER AND SELECT THE DATE IT BEGAN");
+                    mDateTextView.setText("DATE THE LAST PERIOD BEGAN:\n" + /*users.get(0).date*/sdf.format(mDateSelected) + "\n\nESTIMATED START DATE OF THE NEXT PERIOD:\n" + sdf.format(mEstimatedDate) + "\n\nIF THE LATEST PERIOD HAS COME CLICK THE CALENDER AND SELECT THE DATE IT BEGAN");
                     mSubmitButton.setVisibility(View.GONE);
                     mCycleLength.setVisibility(View.GONE);
                 }
