@@ -31,6 +31,17 @@
         android:layout_marginTop="8dp"
         android:text="Info"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateInfo" />
+
+    <TextView
+        android:id="@+id/dateInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Date Info"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calender" />
 
 </android.support.constraint.ConstraintLayout>

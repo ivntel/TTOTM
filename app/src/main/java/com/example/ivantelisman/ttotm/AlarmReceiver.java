@@ -30,7 +30,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         setUpMessage();
 
-        Notification notification = builder.setContentTitle("Demo App Notification")
+        Notification notification = builder.setContentTitle("That Time Of The Month Notification")
                 .setContentText(message)
                 .setTicker("New Message Alert!")
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -56,19 +56,22 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     private void setUpMessage(){
         if(MainActivity.diffInDays == -4){
-            message = "Remember to be nice";
+            message = "Remember to be nice!";
         }
         else if(MainActivity.diffInDays == -3){
-            message = "Bring Home Flowers";
+            message = "Bring Home Flowers!";
         }
         else if(MainActivity.diffInDays == -2){
-            message = "Bring Home Food";
+            message = "Bring Home Food!";
         }
         else if(MainActivity.diffInDays == -1){
-            message = "Be Very Nice";
+            message = "Be Very Nice!";
         }
         else if(MainActivity.diffInDays == 0){
-            message = "It's that time of the month";
+            message = "It's that time of the month!";
+        } else if (MainActivity.diffInDays == 14) {
+            message = "Pick up some condoms your woman is very fertile!";
         }
     }
+
 }

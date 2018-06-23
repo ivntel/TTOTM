@@ -15,14 +15,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ivantelisman.ttotm.db.AppDatabase;
 import com.example.ivantelisman.ttotm.db.User;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -104,14 +102,14 @@ public class MainFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(cycleLength.getText().toString().trim().isEmpty()){
-                    cycleLength.setError("Enter a valid number");
+                if (cycleLength.getText().toString().trim().isEmpty() || (Integer.valueOf(cycleLength.getText().toString().trim()) < 24 || Integer.valueOf(cycleLength.getText().toString().trim()) > 34)) {
+                    cycleLength.setError("Enter a valid number between 24 and 34");
                 }
                 else if(!hasBeenClicked){
                     Toast.makeText(getContext(), "Select A Date From The Calender", Toast.LENGTH_LONG).show();
                 }
                 else if(dateSelected.getTime()>System.currentTimeMillis()){
-                    Toast.makeText(getContext(), "Select A Date From The Calender", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Select A Past Date From The Calender", Toast.LENGTH_LONG).show();
                 }
                 else{
                     myCalendar.setTime(dateSelected);

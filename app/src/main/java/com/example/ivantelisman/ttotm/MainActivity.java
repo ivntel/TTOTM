@@ -1,16 +1,12 @@
 package com.example.ivantelisman.ttotm;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -31,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     Date c = new Date();
     Calendar calendarEstimatedtDate = Calendar.getInstance();
     Calendar calendarSelectedDate = Calendar.getInstance();
+    Calendar currentDate = Calendar.getInstance();
     public static int diffInDays = 1;
 
     @Override
@@ -82,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
 
         calendarEstimatedtDate.setTime(d);
         calendarSelectedDate.setTime(c);
-        diffInDays = calendarSelectedDate.get(Calendar.DAY_OF_YEAR) - calendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
-
+        //diffInDays = calendarSelectedDate.get(Calendar.DAY_OF_YEAR) - calendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
+        diffInDays = currentDate.get(Calendar.DAY_OF_YEAR) - calendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
         if(diffInDays <= 0 && diffInDays >= -4){
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, 0, broadcast);
         }
