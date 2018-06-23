@@ -58,17 +58,17 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private void setUpMessage() {
-        if (MainActivity.diffInDays == -4) {
+        if (MainActivity.mDiffInDays == -4) {
             message = "Remember to be nice!";
-        } else if (MainActivity.diffInDays == -3) {
+        } else if (MainActivity.mDiffInDays == -3) {
             message = "Bring Home Flowers!";
-        } else if (MainActivity.diffInDays == -2) {
+        } else if (MainActivity.mDiffInDays == -2) {
             message = "Bring Home Food!";
-        } else if (MainActivity.diffInDays == -1) {
+        } else if (MainActivity.mDiffInDays == -1) {
             message = "Be Very Nice!";
-        } else if (MainActivity.diffInDays == 0) {
+        } else if (MainActivity.mDiffInDays == 0) {
             message = "It's that time of the month!";
-        } else if (MainActivity.diffInDays == 14) {
+        } else if (MainActivity.mDiffInDays == 14) {
             message = "Pick up some condoms your woman is very fertile!";
         }
     }

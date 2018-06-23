@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.TextView;
 
+import com.example.ivantelisman.ttotm.MainActivity;
 import com.example.ivantelisman.ttotm.MainActivityViewModel;
 import com.example.ivantelisman.ttotm.R;
 import com.example.ivantelisman.ttotm.db.User;
@@ -26,23 +27,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.ivantelisman.ttotm.MainActivity.diffInDays;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class CalanderFragment extends Fragment {
-    public CalendarView calendarView;
-    public boolean inFragment = false;
-    TextView textViewInfo;
-    TextView textViewDateInfo;
-    Date selectedDate = new Date();
-    Date estimatedDate = new Date();
-    String estimatedDateText, selectedDateText;
-    Calendar calendarEstimatedtDate = Calendar.getInstance();
-    Calendar calendarSelectedDate = Calendar.getInstance();
-    Calendar calendarCurrentDate = Calendar.getInstance();
+    public CalendarView mCalendarView;
+    public boolean mInFragment = false;
+    TextView mTextViewInfo;
+    TextView mTextViewDateInfo;
+    Date mSelectedDate = new Date();
+    Date mEstimatedDate = new Date();
+    String mEstimatedDateText, mSelectedDateText;
+    Calendar mCalendarEstimatedtDate = Calendar.getInstance();
+    Calendar mCalendarSelectedDate = Calendar.getInstance();
+    Calendar mCalendarCurrentDate = Calendar.getInstance();
     private MainActivityViewModel mainActivityViewModel;
 
     public CalanderFragment() {
@@ -54,14 +53,14 @@ public class CalanderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calander, container, false);
-        calendarView = view.findViewById(R.id.calender);
-        textViewInfo = view.findViewById(R.id.info);
-        textViewDateInfo = view.findViewById(R.id.dateInfo);
+        mCalendarView = view.findViewById(R.id.calender);
+        mTextViewInfo = view.findViewById(R.id.info);
+        mTextViewDateInfo = view.findViewById(R.id.dateInfo);
         // Get a reference to the ViewModel for this screen.
         mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
         subscribeUiUsersDates();
-        inFragment = true;
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        mInFragment = true;
+        mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -75,7 +74,7 @@ public class CalanderFragment extends Fragment {
 
                             case DialogInterface.BUTTON_NEGATIVE:
                                 //No button clicked
-                                calendarView.setDate(estimatedDate.getTime());
+                                mCalendarView.setDate(mEstimatedDate.getTime());
                                 break;
                         }
                     }
@@ -100,38 +99,38 @@ public class CalanderFragment extends Fragment {
     }
 
     private void showDateInUi(final @NonNull List<User> users) {
-        selectedDateText = users.get(0).date;
-        estimatedDateText = users.get(0).estimatedStartDate;
+        mSelectedDateText = users.get(0).date;
+        mEstimatedDateText = users.get(0).estimatedStartDate;
         SimpleDateFormat dateFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
 
         try {
-            selectedDate = dateFormat.parse(selectedDateText);
-            estimatedDate = dateFormat.parse(estimatedDateText);
+            mSelectedDate = dateFormat.parse(mSelectedDateText);
+            mEstimatedDate = dateFormat.parse(mEstimatedDateText);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        calendarView.setDate(estimatedDate.getTime());
-        calendarSelectedDate.setTime(selectedDate);
+        mCalendarView.setDate(mEstimatedDate.getTime());
+        mCalendarSelectedDate.setTime(mSelectedDate);
 
-        calendarEstimatedtDate.setTime(estimatedDate);
-        diffInDays = calendarCurrentDate.get(Calendar.DAY_OF_YEAR) /*calendarSelectedDate.get(Calendar.DAY_OF_YEAR)*/ - calendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
-        Log.d("showDateInUiD: ", String.valueOf(calendarCurrentDate.get(Calendar.DAY_OF_YEAR)) + " - " + estimatedDate.toString() + " = " + String.valueOf(diffInDays));
-        String oldString = String.valueOf(diffInDays);
+        mCalendarEstimatedtDate.setTime(mEstimatedDate);
+        MainActivity.mDiffInDays = mCalendarCurrentDate.get(Calendar.DAY_OF_YEAR) /*calendarSelectedDate.get(Calendar.DAY_OF_YEAR)*/ - mCalendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
+        Log.d("showDateInUiD: ", String.valueOf(mCalendarCurrentDate.get(Calendar.DAY_OF_YEAR)) + " - " + mEstimatedDate.toString() + " = " + String.valueOf(MainActivity.mDiffInDays));
+        String oldString = String.valueOf(MainActivity.mDiffInDays);
         String newString = oldString.replaceAll("-", "");
 
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-        textViewDateInfo.setText("Last period was: " + sdf.format(selectedDate) + " Next one should be: " + sdf.format(estimatedDate));
-        textViewInfo.setText(newString + " days until the next period!");
-        if (diffInDays == -1) {
-            textViewInfo.setText(newString + " day until the next period!");
-        } else if (diffInDays == 0) {
-            textViewInfo.setText("The period began today!");
-        } else if (diffInDays > 0) {
-            textViewInfo.setText("Go to the previous screen and select the day that the period began!");
+        mTextViewDateInfo.setText("Last period was: " + sdf.format(mSelectedDate) + " Next one should be: " + sdf.format(mEstimatedDate));
+        mTextViewInfo.setText(newString + " days until the next period!");
+        if (MainActivity.mDiffInDays == -1) {
+            mTextViewInfo.setText(newString + " day until the next period!");
+        } else if (MainActivity.mDiffInDays == 0) {
+            mTextViewInfo.setText("The period began today!");
+        } else if (MainActivity.mDiffInDays > 0) {
+            mTextViewInfo.setText("Go to the previous screen and select the day that the period began!");
         }
     }
 

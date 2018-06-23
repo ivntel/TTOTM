@@ -20,19 +20,15 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     private void openedNotificationMessage(){
-        if(MainActivity.diffInDays == -4){
+        if (MainActivity.mDiffInDays == -4) {
             notificationMessage.setText("Remember to be nice");
-        }
-        else if(MainActivity.diffInDays == -3){
+        } else if (MainActivity.mDiffInDays == -3) {
             notificationMessage.setText("Remember to be nice");
-        }
-        else if(MainActivity.diffInDays == -2){
+        } else if (MainActivity.mDiffInDays == -2) {
             notificationMessage.setText("Remember to be nice");
-        }
-        else if(MainActivity.diffInDays == -1){
+        } else if (MainActivity.mDiffInDays == -1) {
             notificationMessage.setText("Remember to be nice");
-        }
-        else if(MainActivity.diffInDays == 0){
+        } else if (MainActivity.mDiffInDays == 0) {
             notificationMessage.setText("Remember to be nice");
         }
     }

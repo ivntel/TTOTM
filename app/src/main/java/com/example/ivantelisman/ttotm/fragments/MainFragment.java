@@ -35,25 +35,23 @@ import java.util.Locale;
  */
 public class MainFragment extends Fragment {
     private AppDatabase mDb;
-    private TextView dateTextView;
-    private Button submitButton;
-    private Button continueButton;
-    private EditText cycleLength;
-    private ImageView imageViewCalender;
-    private String age;
+    private TextView mDateTextView;
+    private Button mSubmitButton;
+    private Button mContinueButton;
+    private EditText mCycleLength;
+    private ImageView mImageViewCalender;
     private User user;
-    private Calendar myCalendar = Calendar.getInstance();
-    private Calendar currentDay = Calendar.getInstance();
-    CalanderFragment calanderFragment;
+    private Calendar mMyCalendar = Calendar.getInstance();
+    private Calendar mCurrentDay = Calendar.getInstance();
+    CalanderFragment mCalanderFragment;
     private MainActivityViewModel mainActivityViewModel;
-    DatePickerDialog.OnDateSetListener date;
-    Date dateSelected = new Date();
-    Date d = new Date();
-    Date next = new Date();
-    View view;
-    private boolean hasBeenClicked = false;
-    private int selectedDayOfTheYear;
-    private String estimatedCycleStartDate;
+    DatePickerDialog.OnDateSetListener mDate;
+    Date mDateSelected = new Date();
+    Date mEstimatedDate = new Date();
+    View mView;
+    private boolean mHasBeenClicked = false;
+    private int mSelectedDayOfTheYear;
+    private String mEstimatedCycleStartDate;
 
     public MainFragment() {
         // Required empty public constructor
@@ -62,99 +60,97 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_main, container, false);
+        mView = inflater.inflate(R.layout.fragment_main, container, false);
         // Inflate the layout for this fragment
-        dateTextView = view.findViewById(R.id.textViewSelectADate);
-        imageViewCalender = view.findViewById(R.id.imageViewCalender);
-        continueButton = view.findViewById(R.id.continueButton);
-        cycleLength = view.findViewById(R.id.cycleLength);
-        submitButton = view.findViewById(R.id.submit);
+        mDateTextView = mView.findViewById(R.id.textViewSelectADate);
+        mImageViewCalender = mView.findViewById(R.id.imageViewCalender);
+        mContinueButton = mView.findViewById(R.id.continueButton);
+        mCycleLength = mView.findViewById(R.id.cycleLength);
+        mSubmitButton = mView.findViewById(R.id.submit);
 
-        calanderFragment = new CalanderFragment();
+        mCalanderFragment = new CalanderFragment();
         // Note: Db references should not be in an activity.
         mDb = AppDatabase.getInMemoryDatabase(getContext());
 
         // Get a reference to the ViewModel for this screen.
         mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
-        date = new DatePickerDialog.OnDateSetListener() {
+        mDate = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
                 // TODO Auto-generated method stub
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                mMyCalendar.set(Calendar.YEAR, year);
+                mMyCalendar.set(Calendar.MONTH, monthOfYear);
+                mMyCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 updateLabel();
             }
         };
 
         subscribeUiUserDate();
 
-        imageViewCalender.setOnClickListener(new View.OnClickListener() {
+        mImageViewCalender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hasBeenClicked = true;
-                new DatePickerDialog(getContext(), date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                mHasBeenClicked = true;
+                new DatePickerDialog(getContext(), mDate, mMyCalendar
+                        .get(Calendar.YEAR), mMyCalendar.get(Calendar.MONTH),
+                        mMyCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cycleLength.getText().toString().trim().isEmpty() || (Integer.valueOf(cycleLength.getText().toString().trim()) < 24 || Integer.valueOf(cycleLength.getText().toString().trim()) > 34)) {
-                    cycleLength.setError("Enter a valid number between 24 and 34");
-                }
-                else if(!hasBeenClicked){
+                if (mCycleLength.getText().toString().trim().isEmpty() || (Integer.valueOf(mCycleLength.getText().toString().trim()) < 24 || Integer.valueOf(mCycleLength.getText().toString().trim()) > 34)) {
+                    mCycleLength.setError("Enter a valid number between 24 and 34");
+                } else if (!mHasBeenClicked) {
                     Toast.makeText(getContext(), "Select A Date From The Calender", Toast.LENGTH_LONG).show();
-                }
-                else if(dateSelected.getTime()>System.currentTimeMillis()){
+                } else if (mDateSelected.getTime() > System.currentTimeMillis()) {
                     Toast.makeText(getContext(), "Please Select A Past Date From The Calender", Toast.LENGTH_LONG).show();
-                } else if ((myCalendar.get(Calendar.DAY_OF_YEAR) - (currentDay.get(Calendar.DAY_OF_YEAR))) < -23) {
+                } else if ((mMyCalendar.get(Calendar.DAY_OF_YEAR) - (mCurrentDay.get(Calendar.DAY_OF_YEAR))) < -23) {
                     Toast.makeText(getContext(), "That Date Is Out Of Possible Ranges!", Toast.LENGTH_LONG).show();
                 } else{
-                    myCalendar.setTime(dateSelected);
-                    selectedDayOfTheYear = myCalendar.get(Calendar.DAY_OF_YEAR);
+                    mMyCalendar.setTime(mDateSelected);
+                    mSelectedDayOfTheYear = mMyCalendar.get(Calendar.DAY_OF_YEAR);
                     Calendar calendar = Calendar.getInstance();
-                    calendar.set(Calendar.DAY_OF_YEAR, selectedDayOfTheYear + Integer.valueOf(cycleLength.getText().toString().trim()));
-                    estimatedCycleStartDate = calendar.getTime().toString();
-                    Log.d("onClick: ", estimatedCycleStartDate + " Selected: " + dateSelected.toString());
+                    calendar.set(Calendar.DAY_OF_YEAR, mSelectedDayOfTheYear + Integer.valueOf(mCycleLength.getText().toString().trim()));
+                    mEstimatedCycleStartDate = calendar.getTime().toString();
+                    Log.d("onClick: ", mEstimatedCycleStartDate + " Selected: " + mDateSelected.toString());
 
                     mainActivityViewModel.mDb.userModel().deleteAll();
                     user = new User();
                     user.id = "5";
-                    user.cycleDuration = Integer.valueOf(cycleLength.getText().toString().trim());
+                    user.cycleDuration = Integer.valueOf(mCycleLength.getText().toString().trim());
                     user.name = "jo";
-                    user.estimatedStartDate = estimatedCycleStartDate;
-                    user.date = dateSelected.toString();
+                    user.estimatedStartDate = mEstimatedCycleStartDate;
+                    user.date = mDateSelected.toString();
                     mDb.userModel().insertUser(user);
-                    Log.d("submitDate: ", String.valueOf(myCalendar.get(Calendar.DAY_OF_YEAR) - (currentDay.get(Calendar.DAY_OF_YEAR))));
+                    Log.d("submitDate: ", String.valueOf(mMyCalendar.get(Calendar.DAY_OF_YEAR) - (mCurrentDay.get(Calendar.DAY_OF_YEAR))));
                     getFragmentManager().beginTransaction().replace(R.id.content, new CalanderFragment(), "calender").commit();
                 }
             }
         });
 
-        continueButton.setOnClickListener(new View.OnClickListener() {
+        mContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getFragmentManager().beginTransaction().replace(R.id.content, new CalanderFragment(), "calender").commit();
             }
         });
 
-        return view;
+        return mView;
     }
 
     private void updateLabel() {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        dateSelected = myCalendar.getTime();
-
-        submitButton.setVisibility(View.VISIBLE);
-        cycleLength.setVisibility(View.VISIBLE);
-        dateTextView.setText("DATE SELECTED:\n" + sdf.format(dateSelected));
+        mDateSelected = mMyCalendar.getTime();
+        //ui changes
+        mSubmitButton.setVisibility(View.VISIBLE);
+        mCycleLength.setVisibility(View.VISIBLE);
+        mDateTextView.setText("DATE SELECTED:\n" + sdf.format(mDateSelected));
     }
 
     private void subscribeUiUserDate() {
@@ -165,16 +161,17 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(@NonNull final List<User> users) {
                 try{
-                    d = dateFormat.parse(users.get(0).date);
-                    next = dateFormat.parse(users.get(0).estimatedStartDate);
-                    dateTextView.setText("DATE THE LAST PERIOD BEGAN:\n" + /*users.get(0).date*/sdf.format(d) +"\n\nESTIMATED START DATE OF THE NEXT PERIOUD:\n" + sdf.format(next) + "\n\nIF THE LATEST PERIOD HAS COME CLICK THE CALENDER AND SELECT THE DATE IT BEGAN");
-
-                    submitButton.setVisibility(View.GONE);
-                    cycleLength.setVisibility(View.GONE);
+                    mDateSelected = dateFormat.parse(users.get(0).date);
+                    mEstimatedDate = dateFormat.parse(users.get(0).estimatedStartDate);
+                    //ui changes
+                    mDateTextView.setText("DATE THE LAST PERIOD BEGAN:\n" + /*users.get(0).date*/sdf.format(mDateSelected) + "\n\nESTIMATED START DATE OF THE NEXT PERIOUD:\n" + sdf.format(mEstimatedDate) + "\n\nIF THE LATEST PERIOD HAS COME CLICK THE CALENDER AND SELECT THE DATE IT BEGAN");
+                    mSubmitButton.setVisibility(View.GONE);
+                    mCycleLength.setVisibility(View.GONE);
                 }
                 catch (Exception e){
-                    dateTextView.setText("CLICK THE CALENDER AND SELECT THE DATE THE LAST PERIOD BEGAN");
-                    continueButton.setVisibility(View.GONE);
+                    //ui changes
+                    mDateTextView.setText("CLICK THE CALENDER AND SELECT THE DATE THE LAST PERIOD BEGAN");
+                    mContinueButton.setVisibility(View.GONE);
                 }
             }
         });

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.ivantelisman.ttotm.db.User;
 import com.example.ivantelisman.ttotm.fragments.CalanderFragment;
@@ -25,20 +24,17 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private MainActivityViewModel mainActivityViewModel;
     //public AppDatabase mDb;
-    Date d = new Date();
-    Date c = new Date();
-    Calendar calendarEstimatedtDate = Calendar.getInstance();
-    Calendar calendarSelectedDate = Calendar.getInstance();
-    Calendar currentDate = Calendar.getInstance();
-    public static int diffInDays = 1;
+    Date mEstimatedDate = new Date();
+    Date mSelectedDate = new Date();
+    Calendar mCalendarEstimatedtDate = Calendar.getInstance();
+    Calendar mCalendarSelectedDate = Calendar.getInstance();
+    Calendar mCurrentDate = Calendar.getInstance();
+    public static int mDiffInDays = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Note: Db references should not be in an activity.
-        //mDb = AppDatabase.getInMemoryDatabase(this);
 
         // Get a reference to the ViewModel for this screen.
         mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
@@ -68,26 +64,25 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        currentDate.set(Calendar.HOUR_OF_DAY, 12);
-        currentDate.set(Calendar.MINUTE, 00);
-        currentDate.set(Calendar.SECOND, 00);
+        mCurrentDate.set(Calendar.HOUR_OF_DAY, 12);
+        mCurrentDate.set(Calendar.MINUTE, 00);
+        mCurrentDate.set(Calendar.SECOND, 00);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
         try {
-            d = dateFormat.parse(estimatedStartDate);
-            c = dateFormat.parse(selectedDate);
+            mEstimatedDate = dateFormat.parse(estimatedStartDate);
+            mSelectedDate = dateFormat.parse(selectedDate);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        Log.d("showDateInUiD: ", d.toString());
 
-        calendarEstimatedtDate.setTime(d);
-        calendarSelectedDate.setTime(c);
+        mCalendarEstimatedtDate.setTime(mEstimatedDate);
+        mCalendarSelectedDate.setTime(mSelectedDate);
         //diffInDays = calendarSelectedDate.get(Calendar.DAY_OF_YEAR) - calendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
-        diffInDays = currentDate.get(Calendar.DAY_OF_YEAR) - calendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
-        if(diffInDays <= 0 && diffInDays >= -4){
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, currentDate.getTimeInMillis(), 12 * 60 * 60 * 1000, broadcast);
+        mDiffInDays = mCurrentDate.get(Calendar.DAY_OF_YEAR) - mCalendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
+        if (mDiffInDays <= 0 && mDiffInDays >= -4) {
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, mCurrentDate.getTimeInMillis(), 12 * 60 * 60 * 1000, broadcast);
         }
     }
 
