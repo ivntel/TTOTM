@@ -1,4 +1,4 @@
-package com.example.ivantelisman.ttotm;
+package com.example.ivantelisman.ttotm.fragments;
 
 
 import android.app.AlertDialog;
@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.TextView;
 
+import com.example.ivantelisman.ttotm.MainActivityViewModel;
+import com.example.ivantelisman.ttotm.R;
 import com.example.ivantelisman.ttotm.db.User;
 
 import java.text.ParseException;
@@ -65,7 +67,7 @@ public class CalanderFragment extends Fragment {
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
+                        switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes button clicked
                                 getFragmentManager().beginTransaction().replace(R.id.content, new MainFragment()).commit();
@@ -97,7 +99,7 @@ public class CalanderFragment extends Fragment {
         });
     }
 
-    private void showDateInUi(final @NonNull List<User> users){
+    private void showDateInUi(final @NonNull List<User> users) {
         selectedDateText = users.get(0).date;
         estimatedDateText = users.get(0).estimatedStartDate;
         SimpleDateFormat dateFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
@@ -112,7 +114,7 @@ public class CalanderFragment extends Fragment {
 
         calendarView.setDate(estimatedDate.getTime());
         calendarSelectedDate.setTime(selectedDate);
-        
+
         calendarEstimatedtDate.setTime(estimatedDate);
         diffInDays = calendarCurrentDate.get(Calendar.DAY_OF_YEAR) /*calendarSelectedDate.get(Calendar.DAY_OF_YEAR)*/ - calendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
         Log.d("showDateInUiD: ", String.valueOf(calendarCurrentDate.get(Calendar.DAY_OF_YEAR)) + " - " + estimatedDate.toString() + " = " + String.valueOf(diffInDays));
@@ -124,13 +126,11 @@ public class CalanderFragment extends Fragment {
 
         textViewDateInfo.setText("Last period was: " + sdf.format(selectedDate) + " Next one should be: " + sdf.format(estimatedDate));
         textViewInfo.setText(newString + " days until the next period!");
-        if(diffInDays == -1){
+        if (diffInDays == -1) {
             textViewInfo.setText(newString + " day until the next period!");
-        }
-        else if(diffInDays==0){
+        } else if (diffInDays == 0) {
             textViewInfo.setText("The period began today!");
-        }
-        else if(diffInDays>0){
+        } else if (diffInDays > 0) {
             textViewInfo.setText("Go to the previous screen and select the day that the period began!");
         }
     }

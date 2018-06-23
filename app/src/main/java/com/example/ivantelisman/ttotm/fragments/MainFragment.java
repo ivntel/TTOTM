@@ -1,4 +1,4 @@
-package com.example.ivantelisman.ttotm;
+package com.example.ivantelisman.ttotm.fragments;
 
 
 import android.app.DatePickerDialog;
@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ivantelisman.ttotm.MainActivityViewModel;
+import com.example.ivantelisman.ttotm.R;
 import com.example.ivantelisman.ttotm.db.AppDatabase;
 import com.example.ivantelisman.ttotm.db.User;
 

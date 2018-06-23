@@ -1,4 +1,4 @@
-package com.example.ivantelisman.ttotm;
+package com.example.ivantelisman.ttotm.pushNotification;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -9,6 +9,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+
+import com.example.ivantelisman.ttotm.MainActivity;
+import com.example.ivantelisman.ttotm.R;
 
 import static android.app.NotificationManager.IMPORTANCE_DEFAULT;
 
@@ -54,20 +57,16 @@ public class AlarmReceiver extends BroadcastReceiver {
         notificationManager.notify(0, notification);
     }
 
-    private void setUpMessage(){
-        if(MainActivity.diffInDays == -4){
+    private void setUpMessage() {
+        if (MainActivity.diffInDays == -4) {
             message = "Remember to be nice!";
-        }
-        else if(MainActivity.diffInDays == -3){
+        } else if (MainActivity.diffInDays == -3) {
             message = "Bring Home Flowers!";
-        }
-        else if(MainActivity.diffInDays == -2){
+        } else if (MainActivity.diffInDays == -2) {
             message = "Bring Home Food!";
-        }
-        else if(MainActivity.diffInDays == -1){
+        } else if (MainActivity.diffInDays == -1) {
             message = "Be Very Nice!";
-        }
-        else if(MainActivity.diffInDays == 0){
+        } else if (MainActivity.diffInDays == 0) {
             message = "It's that time of the month!";
         } else if (MainActivity.diffInDays == 14) {
             message = "Pick up some condoms your woman is very fertile!";

@@ -27,8 +27,8 @@
 
         </activity>
 
-        <activity android:name=".NotificationActivity" />
+        <activity android:name=".pushNotification.NotificationActivity" />
 
-        <receiver android:name=".AlarmReceiver"/>
+        <receiver android:name=".pushNotification.AlarmReceiver" />
     </application>
 </manifest>

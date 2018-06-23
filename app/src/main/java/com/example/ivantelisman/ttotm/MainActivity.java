@@ -11,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.ivantelisman.ttotm.db.User;
+import com.example.ivantelisman.ttotm.fragments.CalanderFragment;
+import com.example.ivantelisman.ttotm.fragments.MainFragment;
+import com.example.ivantelisman.ttotm.pushNotification.AlarmReceiver;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

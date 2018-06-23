@@ -1,9 +1,12 @@
-package com.example.ivantelisman.ttotm;
+package com.example.ivantelisman.ttotm.pushNotification;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
+
+import com.example.ivantelisman.ttotm.MainActivity;
+import com.example.ivantelisman.ttotm.R;
 
 public class NotificationActivity extends AppCompatActivity {
     TextView notificationMessage;
