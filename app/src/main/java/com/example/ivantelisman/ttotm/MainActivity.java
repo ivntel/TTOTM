@@ -65,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        currentDate.set(Calendar.HOUR_OF_DAY, 12);
+        currentDate.set(Calendar.MINUTE, 00);
+        currentDate.set(Calendar.SECOND, 00);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
         try {
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         //diffInDays = calendarSelectedDate.get(Calendar.DAY_OF_YEAR) - calendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
         diffInDays = currentDate.get(Calendar.DAY_OF_YEAR) - calendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
         if(diffInDays <= 0 && diffInDays >= -4){
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, 0, broadcast);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, currentDate.getTimeInMillis(), 12 * 60 * 60 * 1000, broadcast);
         }
     }
 
