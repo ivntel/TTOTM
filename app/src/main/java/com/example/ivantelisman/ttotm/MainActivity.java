@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.example.ivantelisman.ttotm.db.AppDatabase;
 import com.example.ivantelisman.ttotm.db.User;
 
 import java.text.ParseException;
@@ -22,7 +21,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private MainActivityViewModel mainActivityViewModel;
-    private AppDatabase mDb;
+    //public AppDatabase mDb;
     Date d = new Date();
     Date c = new Date();
     Calendar calendarEstimatedtDate = Calendar.getInstance();
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Note: Db references should not be in an activity.
-        mDb = AppDatabase.getInMemoryDatabase(this);
+        //mDb = AppDatabase.getInMemoryDatabase(this);
 
         // Get a reference to the ViewModel for this screen.
         mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
@@ -45,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new MainFragment()).commit();
     }
 
-    @Override
+    /*@Override
     protected void onDestroy() {
-        //AppDatabase.destroyInstance();
+        AppDatabase.destroyInstance();
         super.onDestroy();
-    }
+    }*/
 
     @Override
     public void onBackPressed() {

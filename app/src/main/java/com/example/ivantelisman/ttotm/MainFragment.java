@@ -40,7 +40,8 @@ public class MainFragment extends Fragment {
     private ImageView imageViewCalender;
     private String age;
     private User user;
-    private Calendar myCalendar;
+    private Calendar myCalendar = Calendar.getInstance();
+    private Calendar currentDay = Calendar.getInstance();
     CalanderFragment calanderFragment;
     private MainActivityViewModel mainActivityViewModel;
     DatePickerDialog.OnDateSetListener date;
@@ -66,7 +67,7 @@ public class MainFragment extends Fragment {
         continueButton = view.findViewById(R.id.continueButton);
         cycleLength = view.findViewById(R.id.cycleLength);
         submitButton = view.findViewById(R.id.submit);
-        myCalendar = Calendar.getInstance();
+
         calanderFragment = new CalanderFragment();
         // Note: Db references should not be in an activity.
         mDb = AppDatabase.getInMemoryDatabase(getContext());
@@ -109,9 +110,10 @@ public class MainFragment extends Fragment {
                     Toast.makeText(getContext(), "Select A Date From The Calender", Toast.LENGTH_LONG).show();
                 }
                 else if(dateSelected.getTime()>System.currentTimeMillis()){
-                    Toast.makeText(getContext(), "Select A Past Date From The Calender", Toast.LENGTH_LONG).show();
-                }
-                else{
+                    Toast.makeText(getContext(), "Please Select A Past Date From The Calender", Toast.LENGTH_LONG).show();
+                } else if ((myCalendar.get(Calendar.DAY_OF_YEAR) - (currentDay.get(Calendar.DAY_OF_YEAR))) < -23) {
+                    Toast.makeText(getContext(), "That Date Is Out Of Possible Ranges!", Toast.LENGTH_LONG).show();
+                } else{
                     myCalendar.setTime(dateSelected);
                     selectedDayOfTheYear = myCalendar.get(Calendar.DAY_OF_YEAR);
                     Calendar calendar = Calendar.getInstance();
@@ -119,7 +121,7 @@ public class MainFragment extends Fragment {
                     estimatedCycleStartDate = calendar.getTime().toString();
                     Log.d("onClick: ", estimatedCycleStartDate + " Selected: " + dateSelected.toString());
 
-                    mDb.userModel().deleteAll();
+                    mainActivityViewModel.mDb.userModel().deleteAll();
                     user = new User();
                     user.id = "5";
                     user.cycleDuration = Integer.valueOf(cycleLength.getText().toString().trim());
@@ -127,7 +129,7 @@ public class MainFragment extends Fragment {
                     user.estimatedStartDate = estimatedCycleStartDate;
                     user.date = dateSelected.toString();
                     mDb.userModel().insertUser(user);
-                    Log.d("submitDate: ", dateSelected.toString());
+                    Log.d("submitDate: ", String.valueOf(myCalendar.get(Calendar.DAY_OF_YEAR) - (currentDay.get(Calendar.DAY_OF_YEAR))));
                     getFragmentManager().beginTransaction().replace(R.id.content, new CalanderFragment(), "calender").commit();
                 }
             }

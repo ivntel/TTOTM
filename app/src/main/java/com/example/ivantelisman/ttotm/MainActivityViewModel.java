@@ -8,13 +8,12 @@ import com.example.ivantelisman.ttotm.db.AppDatabase;
 import com.example.ivantelisman.ttotm.db.User;
 import com.example.ivantelisman.ttotm.db.utils.DatabaseInitializer;
 
-
 import java.util.List;
 
 public class MainActivityViewModel extends AndroidViewModel {
     private LiveData<List<User>> mUsers;
 
-    private AppDatabase mDb;
+    public AppDatabase mDb;
 
     public MainActivityViewModel(Application application) {
         super(application);
