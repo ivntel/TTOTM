@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.TextView;
 
-import com.example.ivantelisman.ttotm.MainActivity;
 import com.example.ivantelisman.ttotm.MainActivityViewModel;
 import com.example.ivantelisman.ttotm.R;
 import com.example.ivantelisman.ttotm.db.User;
@@ -34,6 +33,7 @@ import java.util.Locale;
 public class CalanderFragment extends Fragment {
     public CalendarView mCalendarView;
     public boolean mInFragment = false;
+    private int mDiffInDays;
     TextView mTextViewInfo;
     TextView mTextViewDateInfo;
     Date mSelectedDate = new Date();
@@ -101,6 +101,7 @@ public class CalanderFragment extends Fragment {
     private void showDateInUi(final @NonNull List<User> users) {
         mSelectedDateText = users.get(0).date;
         mEstimatedDateText = users.get(0).estimatedStartDate;
+        mDiffInDays = users.get(0).differenceInDays;
         SimpleDateFormat dateFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
 
         try {
@@ -115,9 +116,9 @@ public class CalanderFragment extends Fragment {
         mCalendarSelectedDate.setTime(mSelectedDate);
 
         mCalendarEstimatedtDate.setTime(mEstimatedDate);
-        MainActivity.mDiffInDays = mCalendarCurrentDate.get(Calendar.DAY_OF_YEAR) /*calendarSelectedDate.get(Calendar.DAY_OF_YEAR)*/ - mCalendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
-        Log.d("showDateInUiD: ", String.valueOf(mCalendarCurrentDate.get(Calendar.DAY_OF_YEAR)) + " - " + mEstimatedDate.toString() + " = " + String.valueOf(MainActivity.mDiffInDays));
-        String oldString = String.valueOf(MainActivity.mDiffInDays);
+        mDiffInDays = mCalendarCurrentDate.get(Calendar.DAY_OF_YEAR) - mCalendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
+        Log.d("showDateInUiD: ", String.valueOf(mCalendarCurrentDate.get(Calendar.DAY_OF_YEAR)) + " - " + mEstimatedDate.toString() + " = " + String.valueOf(mDiffInDays));
+        String oldString = String.valueOf(mDiffInDays);
         String newString = oldString.replaceAll("-", "");
 
         String myFormat = "MM/dd/yy"; //In which you need put here
@@ -125,11 +126,11 @@ public class CalanderFragment extends Fragment {
 
         mTextViewDateInfo.setText("Last period was: " + sdf.format(mSelectedDate) + " Next one should be: " + sdf.format(mEstimatedDate));
         mTextViewInfo.setText(newString + " days until the next period!");
-        if (MainActivity.mDiffInDays == -1) {
+        if (mDiffInDays == -1) {
             mTextViewInfo.setText(newString + " day until the next period!");
-        } else if (MainActivity.mDiffInDays == 0) {
+        } else if (mDiffInDays == 0) {
             mTextViewInfo.setText("The period began today!");
-        } else if (MainActivity.mDiffInDays > 0) {
+        } else if (mDiffInDays > 0) {
             mTextViewInfo.setText("Go to the previous screen and select the day that the period began!");
         }
     }

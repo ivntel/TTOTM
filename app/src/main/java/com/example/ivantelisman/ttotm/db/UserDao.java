@@ -34,7 +34,7 @@ public interface UserDao {
     @Query("select * from user where id = :id")
     User loadUserById(int id);
 
-    @Query("select * from user where name = :firstName and cycleDuration = :lastName")
+    @Query("select * from user where differenceInDays = :firstName and cycleDuration = :lastName")
     List<User> findUserByNameAndLastName(String firstName, String lastName);
 
     @Insert(onConflict = IGNORE)
@@ -43,7 +43,7 @@ public interface UserDao {
     @Delete
     void deleteUser(User user);
 
-    @Query("delete from user where name like :badName OR cycleDuration like :badName")
+    @Query("delete from user where differenceInDays like :badName OR cycleDuration like :badName")
     int deleteUsersByName(String badName);
 
     @Insert(onConflict = IGNORE)

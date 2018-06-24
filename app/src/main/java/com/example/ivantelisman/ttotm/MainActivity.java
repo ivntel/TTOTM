@@ -5,9 +5,12 @@ import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.example.ivantelisman.ttotm.db.User;
 import com.example.ivantelisman.ttotm.fragments.CalanderFragment;
@@ -23,13 +26,13 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private MainActivityViewModel mainActivityViewModel;
-    //public AppDatabase mDb;
     Date mEstimatedDate = new Date();
     Date mSelectedDate = new Date();
-    Calendar mCalendarEstimatedtDate = Calendar.getInstance();
+    Calendar mCalendarEstimatedDate = Calendar.getInstance();
     Calendar mCalendarSelectedDate = Calendar.getInstance();
     Calendar mCurrentDate = Calendar.getInstance();
-    public static int mDiffInDays = 1;
+    private int mDiffInDays;
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +43,19 @@ public class MainActivity extends AppCompatActivity {
         mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
         subscribeUiUsers();
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mDiffInDays = preferences.getInt("DIFFERENCE_IN_DAYS", 0);
+        Log.d("onCreate: ", String.valueOf(mDiffInDays));
+
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new MainFragment()).commit();
     }
 
-    /*@Override
+    @Override
     protected void onDestroy() {
-        AppDatabase.destroyInstance();
+        //AppDatabase.destroyInstance();
+        subscribeUiUsers();
         super.onDestroy();
-    }*/
+    }
 
     @Override
     public void onBackPressed() {
@@ -64,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mCurrentDate.set(Calendar.HOUR_OF_DAY, 12);
+        mCurrentDate.set(Calendar.HOUR_OF_DAY, 10);
         mCurrentDate.set(Calendar.MINUTE, 00);
         mCurrentDate.set(Calendar.SECOND, 00);
 
@@ -77,10 +85,9 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        mCalendarEstimatedtDate.setTime(mEstimatedDate);
+        mCalendarEstimatedDate.setTime(mEstimatedDate);
         mCalendarSelectedDate.setTime(mSelectedDate);
-        //diffInDays = calendarSelectedDate.get(Calendar.DAY_OF_YEAR) - calendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
-        mDiffInDays = mCurrentDate.get(Calendar.DAY_OF_YEAR) - mCalendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
+
         if (mDiffInDays <= 0 && mDiffInDays >= -4) {
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, mCurrentDate.getTimeInMillis(), 12 * 60 * 60 * 1000, broadcast);
         }

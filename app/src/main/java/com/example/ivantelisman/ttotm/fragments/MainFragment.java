@@ -4,10 +4,11 @@ package com.example.ivantelisman.ttotm.fragments;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,11 @@ public class MainFragment extends Fragment {
     private ImageView mImageViewCalender;
     private User user;
     private Calendar mMyCalendar = Calendar.getInstance();
-    private Calendar mCurrentDay = Calendar.getInstance();
+    private Calendar mCurrentDayCalender = Calendar.getInstance();
+    private Calendar mEstimatedDay = Calendar.getInstance();
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+
     //CalanderFragment mCalanderFragment = new CalanderFragment();
     private MainActivityViewModel mainActivityViewModel;
     DatePickerDialog.OnDateSetListener mDate;
@@ -67,6 +72,9 @@ public class MainFragment extends Fragment {
         mContinueButton = mView.findViewById(R.id.continueButton);
         mCycleLength = mView.findViewById(R.id.cycleLength);
         mSubmitButton = mView.findViewById(R.id.submit);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        editor = preferences.edit();
 
         // Note: Db references should not be in an activity.
         mDb = AppDatabase.getInMemoryDatabase(getContext());
@@ -108,7 +116,7 @@ public class MainFragment extends Fragment {
                     Toast.makeText(getContext(), "Select A Date From The Calender", Toast.LENGTH_LONG).show();
                 } else if (mDateSelected.getTime() > System.currentTimeMillis()) {
                     Toast.makeText(getContext(), "Please Select A Past Date From The Calender", Toast.LENGTH_LONG).show();
-                } else if ((mMyCalendar.get(Calendar.DAY_OF_YEAR) - (mCurrentDay.get(Calendar.DAY_OF_YEAR))) < -23) {
+                } else if ((mMyCalendar.get(Calendar.DAY_OF_YEAR) - (mCurrentDayCalender.get(Calendar.DAY_OF_YEAR))) < -23) {
                     Toast.makeText(getContext(), "That Date Is Out Of Possible Ranges!", Toast.LENGTH_LONG).show();
                 } else{
                     mMyCalendar.setTime(mDateSelected);
@@ -116,17 +124,22 @@ public class MainFragment extends Fragment {
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.DAY_OF_YEAR, mSelectedDayOfTheYear + Integer.valueOf(mCycleLength.getText().toString().trim()));
                     mEstimatedCycleStartDate = calendar.getTime().toString();
-                    Log.d("onClick: ", mEstimatedCycleStartDate + " Selected: " + mDateSelected.toString());
+
+                    //For calender
+                    mMyCalendar.setTime(mDateSelected);
+                    mEstimatedDay.setTime(mEstimatedDate);
 
                     mainActivityViewModel.mDb.userModel().deleteAll();
                     user = new User();
-                    user.id = "5";
+                    user.id = "0";
                     user.cycleDuration = Integer.valueOf(mCycleLength.getText().toString().trim());
-                    user.name = "jo";
+                    user.differenceInDays = mCurrentDayCalender.get(Calendar.DAY_OF_YEAR) - mEstimatedDay.get(Calendar.DAY_OF_YEAR);
                     user.estimatedStartDate = mEstimatedCycleStartDate;
                     user.date = mDateSelected.toString();
                     mDb.userModel().insertUser(user);
-                    Log.d("submitDate: ", String.valueOf(mMyCalendar.get(Calendar.DAY_OF_YEAR) - (mCurrentDay.get(Calendar.DAY_OF_YEAR))));
+                    editor.putInt("DIFFERENCE_IN_DAYS", mCurrentDayCalender.get(Calendar.DAY_OF_YEAR) - mEstimatedDay.get(Calendar.DAY_OF_YEAR));
+                    editor.apply();
+                    //Log.d("submitDate: ", String.valueOf(mMyCalendar.get(Calendar.DAY_OF_YEAR) - (mCurrentDay.get(Calendar.DAY_OF_YEAR))));
                     getFragmentManager().beginTransaction().replace(R.id.content, new CalanderFragment(), "calender").commit();
                 }
             }

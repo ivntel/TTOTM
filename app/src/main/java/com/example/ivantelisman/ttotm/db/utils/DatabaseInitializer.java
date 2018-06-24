@@ -18,13 +18,9 @@ package com.example.ivantelisman.ttotm.db.utils;
 
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.example.ivantelisman.ttotm.db.AppDatabase;
 import com.example.ivantelisman.ttotm.db.User;
-
-import java.util.Calendar;
-import java.util.Date;
 
 public class DatabaseInitializer {
 
@@ -41,12 +37,12 @@ public class DatabaseInitializer {
         populateWithTestData(db);
     }
 
-    private static User addUser(final AppDatabase db, final String id, final String name,
+    private static User addUser(final AppDatabase db, final String id, final int differenceInDays,
                                 final String estimatedStartDate, final int cycleDuration, final String date) {
         User user = new User();
         user.id = id;
         user.cycleDuration = cycleDuration;
-        user.name = name;
+        user.differenceInDays = differenceInDays;
         user.estimatedStartDate = estimatedStartDate;
         user.date = date;
         db.userModel().insertUser(user);

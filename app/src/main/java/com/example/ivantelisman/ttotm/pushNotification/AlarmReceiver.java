@@ -8,9 +8,10 @@ import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 
-import com.example.ivantelisman.ttotm.MainActivity;
 import com.example.ivantelisman.ttotm.R;
 
 import static android.app.NotificationManager.IMPORTANCE_DEFAULT;
@@ -18,9 +19,14 @@ import static android.app.NotificationManager.IMPORTANCE_DEFAULT;
 public class AlarmReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "push_notification";
     private String message = "Default Message";
+    private int mDiffInDays;
+    SharedPreferences preferences;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        mDiffInDays = preferences.getInt("DIFFERENCE_IN_DAYS", 0);
+
         Intent notificationIntent = new Intent(context, NotificationActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
@@ -58,17 +64,17 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private void setUpMessage() {
-        if (MainActivity.mDiffInDays == -4) {
+        if (mDiffInDays == -4) {
             message = "Remember to be nice!";
-        } else if (MainActivity.mDiffInDays == -3) {
+        } else if (mDiffInDays == -3) {
             message = "Bring Home Flowers!";
-        } else if (MainActivity.mDiffInDays == -2) {
+        } else if (mDiffInDays == -2) {
             message = "Bring Home Food!";
-        } else if (MainActivity.mDiffInDays == -1) {
+        } else if (mDiffInDays == -1) {
             message = "Be Very Nice!";
-        } else if (MainActivity.mDiffInDays == 0) {
+        } else if (mDiffInDays == 0) {
             message = "It's that time of the month!";
-        } else if (MainActivity.mDiffInDays == 14) {
+        } else if (mDiffInDays == 14) {
             message = "Pick up some condoms your woman is very fertile!";
         }
     }

@@ -20,8 +20,6 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import java.util.Date;
-
 
 @Entity
 public class User {
@@ -29,7 +27,7 @@ public class User {
     @NonNull
     public String id;
 
-    public String name;
+    public int differenceInDays;
 
     public String estimatedStartDate;
 
