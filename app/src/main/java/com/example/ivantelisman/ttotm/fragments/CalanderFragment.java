@@ -34,14 +34,14 @@ public class CalanderFragment extends Fragment {
     public CalendarView mCalendarView;
     public boolean mInFragment = false;
     private int mDiffInDays;
-    TextView mTextViewInfo;
-    TextView mTextViewDateInfo;
-    Date mSelectedDate = new Date();
-    Date mEstimatedDate = new Date();
-    String mEstimatedDateText, mSelectedDateText;
-    Calendar mCalendarEstimatedtDate = Calendar.getInstance();
-    Calendar mCalendarSelectedDate = Calendar.getInstance();
-    Calendar mCalendarCurrentDate = Calendar.getInstance();
+    private TextView mTextViewInfo;
+    private TextView mTextViewDateInfo;
+    private Date mSelectedDate = new Date();
+    private Date mEstimatedDate = new Date();
+    private String mEstimatedDateText, mSelectedDateText;
+    private Calendar mCalendarEstimatedtDate = Calendar.getInstance();
+    private Calendar mCalendarSelectedDate = Calendar.getInstance();
+    private Calendar mCalendarCurrentDate = Calendar.getInstance();
     private MainActivityViewModel mainActivityViewModel;
 
     public CalanderFragment() {

@@ -2,37 +2,26 @@ package com.example.ivantelisman.ttotm;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.example.ivantelisman.ttotm.db.User;
 import com.example.ivantelisman.ttotm.fragments.CalanderFragment;
 import com.example.ivantelisman.ttotm.fragments.MainFragment;
 import com.example.ivantelisman.ttotm.pushNotification.AlarmReceiver;
+import com.example.ivantelisman.ttotm.pushNotification.UpdateByDay;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    private MainActivityViewModel mainActivityViewModel;
-    Date mEstimatedDate = new Date();
-    Date mSelectedDate = new Date();
-    Calendar mCalendarEstimatedDate = Calendar.getInstance();
-    Calendar mCalendarSelectedDate = Calendar.getInstance();
-    Calendar mCurrentDate = Calendar.getInstance();
+    private Calendar mCurrentDate = Calendar.getInstance();
+    private Calendar mCurrentDateDayUpdate = Calendar.getInstance();
     private int mDiffInDays;
-    SharedPreferences preferences;
+    private boolean notificationHasShown;
+    private boolean fromNotificationActivity;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,21 +29,34 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Get a reference to the ViewModel for this screen.
-        mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
-        subscribeUiUsers();
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mDiffInDays = preferences.getInt("DIFFERENCE_IN_DAYS", 0);
-        Log.d("onCreate: ", String.valueOf(mDiffInDays));
+        triggerPushNotification();
+        mDiffInDays = PreferenceUtil.getInstance(this).getDifferenceInDays();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new MainFragment()).commit();
     }
 
     @Override
     protected void onDestroy() {
-        //AppDatabase.destroyInstance();
-        subscribeUiUsers();
+        triggerPushNotification();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        PreferenceUtil.getInstance(this).saveFromNotificationActivityBool(false);
+        triggerPushNotification();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        triggerPushNotification();
+        mDiffInDays = PreferenceUtil.getInstance(this).getDifferenceInDays();
+        fromNotificationActivity = PreferenceUtil.getInstance(this).getFromNotificationActivityBool();
+        notificationHasShown = fromNotificationActivity;
+        Log.d("onResume: ", String.valueOf(fromNotificationActivity) + " " + String.valueOf(notificationHasShown));
+        super.onResume();
     }
 
     @Override
@@ -62,50 +64,50 @@ public class MainActivity extends AppCompatActivity {
         CalanderFragment myFragment = (CalanderFragment) getSupportFragmentManager().findFragmentByTag("calender");
         if (myFragment != null && myFragment.isVisible()){
             getSupportFragmentManager().beginTransaction().replace(R.id.content, new MainFragment()).commit();
-        }
-        else{
-        super.onBackPressed();
+        } else if (PreferenceUtil.getInstance(this).getFromNotificationActivityBool()) {
+            Intent a = new Intent(Intent.ACTION_MAIN);
+            a.addCategory(Intent.CATEGORY_HOME);
+            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(a);
+        } else{
+            super.onBackPressed();
         }
     }
 
-    public void triggerPushNotification(String estimatedStartDate, String selectedDate){
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mCurrentDate.set(Calendar.HOUR_OF_DAY, 10);
-        mCurrentDate.set(Calendar.MINUTE, 00);
-        mCurrentDate.set(Calendar.SECOND, 00);
+    public void triggerPushNotification() {
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+        //alarm for updating boolean for push notification
+        AlarmManager alarmManagerDayUpdate = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intentDayUpdate = new Intent(this, UpdateByDay.class);
+        PendingIntent broadcastDayUpdate = PendingIntent.getBroadcast(this, 100, intentDayUpdate, PendingIntent.FLAG_UPDATE_CURRENT);
+        mCurrentDateDayUpdate.set(Calendar.HOUR_OF_DAY, 11);
+        mCurrentDateDayUpdate.set(Calendar.MINUTE, 59);
+        mCurrentDateDayUpdate.set(Calendar.SECOND, 00);
+
         try {
-            mEstimatedDate = dateFormat.parse(estimatedStartDate);
-            mSelectedDate = dateFormat.parse(selectedDate);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
+            //alarmManagerDayUpdate.setRepeating(AlarmManager.RTC_WAKEUP, mCurrentDateDayUpdate.getTimeInMillis(), 12 * 60 * 60 * 1000, broadcastDayUpdate);
+            alarmManagerDayUpdate.set(AlarmManager.RTC_WAKEUP, mCurrentDateDayUpdate.getTimeInMillis(), broadcastDayUpdate);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        mCalendarEstimatedDate.setTime(mEstimatedDate);
-        mCalendarSelectedDate.setTime(mSelectedDate);
+        //alarm for push notification
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mCurrentDate.set(Calendar.HOUR_OF_DAY, 12);
+        mCurrentDate.set(Calendar.MINUTE, 00);
+        mCurrentDate.set(Calendar.SECOND, 00);
 
-        if (mDiffInDays <= 0 && mDiffInDays >= -4) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, mCurrentDate.getTimeInMillis(), 12 * 60 * 60 * 1000, broadcast);
-        }
-    }
-
-    private void subscribeUiUsers() {
-        mainActivityViewModel.getUsers().observe(this, new Observer<List<User>>() {
-            @Override
-            public void onChanged(@NonNull final List<User> users) {
-                try{
-                triggerPushNotification(users.get(0).estimatedStartDate, users.get(0).date);
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
-
+        if (mDiffInDays <= 0 && mDiffInDays >= -4 || mDiffInDays == 14 && !PreferenceUtil.getInstance(this).getUpdateDayBool()) {
+            try {
+                //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, mCurrentDate.getTimeInMillis(), 12 * 60 * 60 * 1000, broadcast);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, mCurrentDate.getTimeInMillis(), broadcast);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+
+        }
     }
 
 }

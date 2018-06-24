@@ -4,9 +4,7 @@ package com.example.ivantelisman.ttotm.fragments;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -20,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ivantelisman.ttotm.MainActivityViewModel;
+import com.example.ivantelisman.ttotm.PreferenceUtil;
 import com.example.ivantelisman.ttotm.R;
 import com.example.ivantelisman.ttotm.db.AppDatabase;
 import com.example.ivantelisman.ttotm.db.User;
@@ -45,15 +44,11 @@ public class MainFragment extends Fragment {
     private Calendar mMyCalendar = Calendar.getInstance();
     private Calendar mCurrentDayCalender = Calendar.getInstance();
     private Calendar mEstimatedDay = Calendar.getInstance();
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
-
-    //CalanderFragment mCalanderFragment = new CalanderFragment();
     private MainActivityViewModel mainActivityViewModel;
-    DatePickerDialog.OnDateSetListener mDate;
-    Date mDateSelected = new Date();
-    Date mEstimatedDate = new Date();
-    View mView;
+    private DatePickerDialog.OnDateSetListener mDate;
+    private Date mDateSelected = new Date();
+    private Date mEstimatedDate = new Date();
+    private View mView;
     private boolean mHasBeenClicked = false;
     private int mSelectedDayOfTheYear;
     private String mEstimatedCycleStartDate;
@@ -72,9 +67,6 @@ public class MainFragment extends Fragment {
         mContinueButton = mView.findViewById(R.id.continueButton);
         mCycleLength = mView.findViewById(R.id.cycleLength);
         mSubmitButton = mView.findViewById(R.id.submit);
-
-        preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        editor = preferences.edit();
 
         // Note: Db references should not be in an activity.
         mDb = AppDatabase.getInMemoryDatabase(getContext());
@@ -137,8 +129,7 @@ public class MainFragment extends Fragment {
                     user.estimatedStartDate = mEstimatedCycleStartDate;
                     user.date = mDateSelected.toString();
                     mDb.userModel().insertUser(user);
-                    editor.putInt("DIFFERENCE_IN_DAYS", mCurrentDayCalender.get(Calendar.DAY_OF_YEAR) - mEstimatedDay.get(Calendar.DAY_OF_YEAR));
-                    editor.apply();
+                    PreferenceUtil.getInstance(getContext()).saveDifferenceInDays(mCurrentDayCalender.get(Calendar.DAY_OF_YEAR) - mEstimatedDay.get(Calendar.DAY_OF_YEAR));
                     //Log.d("submitDate: ", String.valueOf(mMyCalendar.get(Calendar.DAY_OF_YEAR) - (mCurrentDay.get(Calendar.DAY_OF_YEAR))));
                     getFragmentManager().beginTransaction().replace(R.id.content, new CalanderFragment(), "calender").commit();
                 }

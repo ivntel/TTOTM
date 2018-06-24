@@ -1,26 +1,23 @@
 package com.example.ivantelisman.ttotm.pushNotification;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.example.ivantelisman.ttotm.MainActivity;
+import com.example.ivantelisman.ttotm.PreferenceUtil;
 import com.example.ivantelisman.ttotm.R;
 
 public class NotificationActivity extends AppCompatActivity {
     TextView notificationMessage;
     private int mDiffInDays;
-    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        mDiffInDays = preferences.getInt("DIFFERENCE_IN_DAYS", 0);
+        mDiffInDays = PreferenceUtil.getInstance(this).getDifferenceInDays();
 
         notificationMessage = findViewById(R.id.notificationMessage);
         openedNotificationMessage();
@@ -42,6 +39,7 @@ public class NotificationActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        PreferenceUtil.getInstance(this).saveFromNotificationActivityBool(true);
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
     }

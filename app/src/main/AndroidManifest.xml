@@ -29,5 +29,8 @@
 
         <activity android:name=".pushNotification.NotificationActivity" />
 
+        <receiver android:name=".pushNotification.AlarmReceiver" />
+        <receiver android:name=".pushNotification.UpdateByDay" />
+
     </application>
 </manifest>
