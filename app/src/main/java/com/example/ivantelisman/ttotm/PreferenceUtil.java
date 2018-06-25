@@ -72,17 +72,4 @@ public class PreferenceUtil {
         return sharedPreferences.getBoolean("NOTIFICATION_HAS_SHOWN", false);
     }
 
-    public void saveUpdateDayBool(boolean updateDay) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("NOTIFICATION_HAS_SHOWN", updateDay);
-        editor.commit();
-    }
-
-    /**
-     * Returns the NotificationHasShown as a boolean.
-     */
-    public boolean getUpdateDayBool() {
-        return sharedPreferences.getBoolean("NOTIFICATION_HAS_SHOWN", true);
-    }
-
 }

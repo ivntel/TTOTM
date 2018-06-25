@@ -11,9 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
-import com.example.ivantelisman.ttotm.PreferenceUtil;
 import com.example.ivantelisman.ttotm.R;
 
 import static android.app.NotificationManager.IMPORTANCE_DEFAULT;
@@ -37,7 +35,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if (!PreferenceUtil.getInstance(context).getUpdateDayBool()) {
             Notification.Builder builder = new Notification.Builder(context);
 
             setUpMessage();
@@ -64,9 +61,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             }
 
             notificationManager.notify(0, notification);
-            PreferenceUtil.getInstance(context).saveUpdateDayBool(true);
-            Log.d("boolRec: ", String.valueOf(PreferenceUtil.getInstance(context).getUpdateDayBool()));
-        }
     }
 
     private void setUpMessage() {
