@@ -102,25 +102,25 @@ public class MainFragment extends Fragment {
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mMyCalendar.setTime(mDateSelected);
+                mSelectedDayOfTheYear = mMyCalendar.get(Calendar.DAY_OF_YEAR);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.DAY_OF_YEAR, mSelectedDayOfTheYear + Integer.valueOf(mCycleLength.getText().toString().trim()));
+                mEstimatedCycleStartDate = calendar.getTime().toString();
+
+                //For calender
+                mMyCalendar.setTime(mDateSelected);
+                mEstimatedDay.setTime(mEstimatedDate);
+
                 if (mCycleLength.getText().toString().trim().isEmpty() || (Integer.valueOf(mCycleLength.getText().toString().trim()) < 24 || Integer.valueOf(mCycleLength.getText().toString().trim()) > 34)) {
                     mCycleLength.setError("Enter a valid number between 24 and 34");
                 } else if (!mHasBeenClicked) {
                     Toast.makeText(getContext(), "Select A Date From The Calender", Toast.LENGTH_LONG).show();
                 } else if (mDateSelected.getTime() > System.currentTimeMillis()) {
                     Toast.makeText(getContext(), "Please Select A Past Date From The Calender", Toast.LENGTH_LONG).show();
-                } else if ((mMyCalendar.get(Calendar.DAY_OF_YEAR) - (mCurrentDayCalender.get(Calendar.DAY_OF_YEAR))) < -23) {
+                } else if ((mCurrentDayCalender.get(Calendar.DAY_OF_YEAR) - mEstimatedDay.get(Calendar.DAY_OF_YEAR)) >= 0) {
                     Toast.makeText(getContext(), "That Date Is Out Of Possible Ranges!", Toast.LENGTH_LONG).show();
                 } else{
-                    mMyCalendar.setTime(mDateSelected);
-                    mSelectedDayOfTheYear = mMyCalendar.get(Calendar.DAY_OF_YEAR);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(Calendar.DAY_OF_YEAR, mSelectedDayOfTheYear + Integer.valueOf(mCycleLength.getText().toString().trim()));
-                    mEstimatedCycleStartDate = calendar.getTime().toString();
-
-                    //For calender
-                    mMyCalendar.setTime(mDateSelected);
-                    mEstimatedDay.setTime(mEstimatedDate);
-
                     mainActivityViewModel.mDb.userModel().deleteAll();
                     user = new User();
                     user.id = "0";
