@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent broadcast = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         mCurrentDate.set(Calendar.HOUR_OF_DAY, 12);
-        mCurrentDate.set(Calendar.MINUTE, 00);
+        mCurrentDate.set(Calendar.MINUTE, 39);
         mCurrentDate.set(Calendar.SECOND, 00);
 
         if (mDiffInDays <= 0 && mDiffInDays >= -4 || mDiffInDays == 14) {

@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class MainFragment extends Fragment {
     private Button mContinueButton;
     private EditText mCycleLength;
     private ImageView mImageViewCalender;
+    private CardView mCardView;
     private User user;
     private Calendar mMyCalendar = Calendar.getInstance();
     private Calendar mCurrentDayCalender = Calendar.getInstance();
@@ -67,6 +69,7 @@ public class MainFragment extends Fragment {
         mContinueButton = mView.findViewById(R.id.continueButton);
         mCycleLength = mView.findViewById(R.id.cycleLength);
         mSubmitButton = mView.findViewById(R.id.submit);
+        mCardView = mView.findViewById(R.id.buttonsAndEditTextCard);
 
         // Note: Db references should not be in an activity.
         mDb = AppDatabase.getInMemoryDatabase(getContext());
@@ -153,6 +156,7 @@ public class MainFragment extends Fragment {
         //ui changes
         mSubmitButton.setVisibility(View.VISIBLE);
         mCycleLength.setVisibility(View.VISIBLE);
+        mCardView.setVisibility(View.VISIBLE);
         mDateTextView.setText("DATE SELECTED:\n" + sdf.format(mDateSelected));
     }
 
@@ -170,11 +174,13 @@ public class MainFragment extends Fragment {
                     mDateTextView.setText("DATE THE LAST PERIOD BEGAN:\n" + /*users.get(0).date*/sdf.format(mDateSelected) + "\n\nESTIMATED START DATE OF THE NEXT PERIOD:\n" + sdf.format(mEstimatedDate) + "\n\nIF THE LATEST PERIOD HAS COME CLICK THE CALENDER AND SELECT THE DATE IT BEGAN");
                     mSubmitButton.setVisibility(View.GONE);
                     mCycleLength.setVisibility(View.GONE);
+                    mCardView.setVisibility(View.GONE);
                 }
                 catch (Exception e){
                     //ui changes
                     mDateTextView.setText("CLICK THE CALENDER AND SELECT THE DATE THE LAST PERIOD BEGAN");
                     mContinueButton.setVisibility(View.GONE);
+                    mCardView.setVisibility(View.GONE);
                 }
             }
         });
