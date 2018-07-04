@@ -9,14 +9,19 @@ import com.example.ivantelisman.ttotm.MainActivity;
 import com.example.ivantelisman.ttotm.PreferenceUtil;
 import com.example.ivantelisman.ttotm.R;
 
+import java.util.Calendar;
+import java.util.List;
+
 public class NotificationActivity extends AppCompatActivity {
     TextView notificationMessage;
     private int mDiffInDays;
+    private Calendar mCurrentDate = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+
         mDiffInDays = PreferenceUtil.getInstance(this).getDifferenceInDays();
 
         notificationMessage = findViewById(R.id.notificationMessage);
@@ -24,16 +29,19 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     private void openedNotificationMessage(){
-        if (mDiffInDays == -4) {
+        List<Integer> daysList = PreferenceUtil.getInstance(this).getNotificationDates();
+        if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(4)) {
             notificationMessage.setText("4");
-        } else if (mDiffInDays == -3) {
+        } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(3)) {
             notificationMessage.setText("3");
-        } else if (mDiffInDays == -2) {
+        } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(2)) {
             notificationMessage.setText("2");
-        } else if (mDiffInDays == -1) {
+        } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(1)) {
             notificationMessage.setText("1");
-        } else if (mDiffInDays == 0) {
+        } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(0)) {
             notificationMessage.setText("0");
+        } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(5)) {
+            notificationMessage.setText("14");
         }
     }
 

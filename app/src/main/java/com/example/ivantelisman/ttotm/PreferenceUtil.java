@@ -75,28 +75,28 @@ public class PreferenceUtil {
         return sharedPreferences.getBoolean("NOTIFICATION_HAS_SHOWN", false);
     }
 
-    public void saveNotificationDates(String day0, String day1, String day2, String day3, String day4, String day14) {
+    public void saveNotificationDates(int day0, int day1, int day2, int day3, int day4, int day14) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("DAY_ZERO", day0);
-        editor.putString("DAY_ONE", day1);
-        editor.putString("DAY_TWO", day2);
-        editor.putString("DAY_THREE", day3);
-        editor.putString("DAY_FOUR", day4);
-        editor.putString("DAY_FOURTEEN", day14);
+        editor.putInt("DAY_ZERO", day0);
+        editor.putInt("DAY_ONE", day1);
+        editor.putInt("DAY_TWO", day2);
+        editor.putInt("DAY_THREE", day3);
+        editor.putInt("DAY_FOUR", day4);
+        editor.putInt("DAY_FOURTEEN", day14);
         editor.commit();
     }
 
     /**
      * Returns the NotificationHasShown as a boolean.
      */
-    public List<String> getNotificationDates() {
-        String day0 = sharedPreferences.getString("DAY_ZERO", null);
-        String day1 = sharedPreferences.getString("DAY_ONE", null);
-        String day2 = sharedPreferences.getString("DAY_TWO", null);
-        String day3 = sharedPreferences.getString("DAY_THREE", null);
-        String day4 = sharedPreferences.getString("DAY_FOUR", null);
-        String day14 = sharedPreferences.getString("DAY_FOURTEEN", null);
-        List<String> list = new ArrayList<>();
+    public List<Integer> getNotificationDates() {
+        int day0 = sharedPreferences.getInt("DAY_ZERO", 0);
+        int day1 = sharedPreferences.getInt("DAY_ONE", 0);
+        int day2 = sharedPreferences.getInt("DAY_TWO", 0);
+        int day3 = sharedPreferences.getInt("DAY_THREE", 0);
+        int day4 = sharedPreferences.getInt("DAY_FOUR", 0);
+        int day14 = sharedPreferences.getInt("DAY_FOURTEEN", 0);
+        List<Integer> list = new ArrayList<>();
         list.add(day0);
         list.add(day1);
         list.add(day2);

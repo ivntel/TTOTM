@@ -12,7 +12,11 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
+import com.example.ivantelisman.ttotm.PreferenceUtil;
 import com.example.ivantelisman.ttotm.R;
+
+import java.util.Calendar;
+import java.util.List;
 
 import static android.app.NotificationManager.IMPORTANCE_DEFAULT;
 
@@ -21,6 +25,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     private String message = "Default Message";
     private int mDiffInDays;
     SharedPreferences preferences;
+    private Calendar mCurrentDate = Calendar.getInstance();
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -37,7 +43,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
             Notification.Builder builder = new Notification.Builder(context);
 
-            setUpMessage();
+        setUpMessage(context);
 
             Notification notification = builder.setContentTitle("That Time Of The Month Notification")
                     .setContentText(message)
@@ -63,8 +69,22 @@ public class AlarmReceiver extends BroadcastReceiver {
             notificationManager.notify(0, notification);
     }
 
-    private void setUpMessage() {
-        if (mDiffInDays == -4) {
+    private void setUpMessage(Context context) {
+        List<Integer> daysList = PreferenceUtil.getInstance(context).getNotificationDates();
+        if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(4)) {
+            message = "Remember to be nice!";
+        } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(3)) {
+            message = "Bring Home Flowers!";
+        } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(2)) {
+            message = "Bring Home Food!";
+        } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(1)) {
+            message = "Be Very Nice!";
+        } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(0)) {
+            message = "It's that time of the month!";
+        } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(5)) {
+            message = "Pick up some condoms your woman is very fertile!";
+        }
+        /*if (mDiffInDays == -4) {
             message = "Remember to be nice!";
         } else if (mDiffInDays == -3) {
             message = "Bring Home Flowers!";
@@ -76,7 +96,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             message = "It's that time of the month!";
         } else if (mDiffInDays == 14) {
             message = "Pick up some condoms your woman is very fertile!";
-        }
+        }*/
     }
 
 }

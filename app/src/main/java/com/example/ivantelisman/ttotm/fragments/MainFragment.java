@@ -112,39 +112,7 @@ public class MainFragment extends Fragment {
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCycleDays = Integer.valueOf(cycleDay);
-                //selected date
-                mDateSelectedCalendar.setTime(mDateSelected);
-                mSelectedDayOfTheYear = mDateSelectedCalendar.get(Calendar.DAY_OF_YEAR);
-                //estimated date
-                mEstimatedDayCalender.setTime(mDateSelected);
-                mEstimatedCycleStartDate = String.valueOf(mDateSelectedCalendar.get(Calendar.DAY_OF_YEAR) + mCycleDays);
-                //convert mEstimatedCycleStartDate day of year to date format
-                mEstimatedDayCalender.set(Calendar.DAY_OF_YEAR, Integer.valueOf(mEstimatedCycleStartDate));
-                mEstimatedDate = mEstimatedDayCalender.getTime();
-
-                mDifferenceInDays = mCurrentDayCalender.get(Calendar.DAY_OF_YEAR) - Integer.valueOf(mEstimatedCycleStartDate);
-
-                if (cycleDay.equals("0")) {
-                    Toast.makeText(getContext(), "Choose a cycle day amount between 24 and 34", Toast.LENGTH_LONG).show();
-                } else if (!mHasBeenClicked) {
-                    Toast.makeText(getContext(), "Select A Date From The Calender", Toast.LENGTH_LONG).show();
-                } else if (mDateSelected.getTime() > System.currentTimeMillis()) {
-                    Toast.makeText(getContext(), "Please Select A Past Date From The Calender", Toast.LENGTH_LONG).show();
-                } else if (mDifferenceInDays >= 0) {
-                    Toast.makeText(getContext(), "That Date Is Out Of Possible Ranges!", Toast.LENGTH_LONG).show();
-                } else{
-                    mainActivityViewModel.mDb.userModel().deleteAll();
-                    user = new User();
-                    user.id = "0";
-                    user.cycleDuration = Integer.valueOf(cycleDay);
-                    user.differenceInDays = mDifferenceInDays;
-                    user.estimatedStartDate = mEstimatedDate.toString();
-                    user.date = mDateSelected.toString();
-                    mDb.userModel().insertUser(user);
-                    PreferenceUtil.getInstance(getContext()).saveDifferenceInDays(mDifferenceInDays);
-                    getFragmentManager().beginTransaction().replace(R.id.content, new CalanderFragment(), "calender").commit();
-                }
+                processAndSubmitData();
             }
         });
 
@@ -248,4 +216,49 @@ public class MainFragment extends Fragment {
         });
     }
 
+    private void saveNotificationInfo(int day0, int day1, int day2, int day3, int day4, int day14) {
+        PreferenceUtil.getInstance(getContext()).saveNotificationDates(day0, day1, day2, day3, day4, day14);
+    }
+
+    private void saveDateDataInDB() {
+        mainActivityViewModel.mDb.userModel().deleteAll();
+        user = new User();
+        user.id = "0";
+        user.cycleDuration = Integer.valueOf(cycleDay);
+        user.differenceInDays = mDifferenceInDays;
+        user.estimatedStartDate = mEstimatedDate.toString();
+        user.date = mDateSelected.toString();
+        mDb.userModel().insertUser(user);
+        PreferenceUtil.getInstance(getContext()).saveDifferenceInDays(mDifferenceInDays);
+    }
+
+    private void processAndSubmitData() {
+        mCycleDays = Integer.valueOf(cycleDay);
+        //selected date
+        mDateSelectedCalendar.setTime(mDateSelected);
+        mSelectedDayOfTheYear = mDateSelectedCalendar.get(Calendar.DAY_OF_YEAR);
+        //estimated date
+        mEstimatedDayCalender.setTime(mDateSelected);
+        mEstimatedCycleStartDate = String.valueOf(mDateSelectedCalendar.get(Calendar.DAY_OF_YEAR) + mCycleDays);
+        //convert mEstimatedCycleStartDate day of year to date format
+        mEstimatedDayCalender.set(Calendar.DAY_OF_YEAR, Integer.valueOf(mEstimatedCycleStartDate));
+        mEstimatedDate = mEstimatedDayCalender.getTime();
+
+        mDifferenceInDays = mCurrentDayCalender.get(Calendar.DAY_OF_YEAR) - Integer.valueOf(mEstimatedCycleStartDate);
+
+        if (cycleDay.equals("0")) {
+            Toast.makeText(getContext(), "Choose a cycle day amount between 24 and 34", Toast.LENGTH_LONG).show();
+        } else if (!mHasBeenClicked) {
+            Toast.makeText(getContext(), "Select A Date From The Calender", Toast.LENGTH_LONG).show();
+        } else if (mDateSelected.getTime() > System.currentTimeMillis()) {
+            Toast.makeText(getContext(), "Please Select A Past Date From The Calender", Toast.LENGTH_LONG).show();
+        } else if (mDifferenceInDays >= 0) {
+            Toast.makeText(getContext(), "That Date Is Out Of Possible Ranges!", Toast.LENGTH_LONG).show();
+        } else {
+            saveDateDataInDB();
+            saveNotificationInfo(Integer.valueOf(mEstimatedCycleStartDate), Integer.valueOf(mEstimatedCycleStartDate) - 1, Integer.valueOf(mEstimatedCycleStartDate) - 2, Integer.valueOf(mEstimatedCycleStartDate) - 3, Integer.valueOf(mEstimatedCycleStartDate) - 4, Integer.valueOf(mEstimatedCycleStartDate) - 14);
+
+            getFragmentManager().beginTransaction().replace(R.id.content, new CalanderFragment(), "calender").commit();
+        }
+    }
 }

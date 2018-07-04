@@ -37,7 +37,6 @@ public class MainActivityViewModel extends AndroidViewModel {
     private void subscribeToDbChanges() {
         // Users is a LiveData object so updates are observed.
         // TODO: replace this with a query that searches for users by age
-        //mUsers = mDb.userModel().findUsersUserByAge(40);
         mUsers = mDb.userModel().loadAllUsers();
     }
 }
