@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.preference.PreferenceManager;
 
 import com.example.ivantelisman.ttotm.PreferenceUtil;
 import com.example.ivantelisman.ttotm.R;
@@ -23,16 +22,12 @@ import static android.app.NotificationManager.IMPORTANCE_DEFAULT;
 public class AlarmReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "push_notification";
     private String message = "Default Message";
-    private int mDiffInDays;
     SharedPreferences preferences;
     private Calendar mCurrentDate = Calendar.getInstance();
 
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mDiffInDays = preferences.getInt("DIFFERENCE_IN_DAYS", 0);
-
         Intent notificationIntent = new Intent(context, NotificationActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
@@ -84,19 +79,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(5)) {
             message = "Pick up some condoms your woman is very fertile!";
         }
-        /*if (mDiffInDays == -4) {
-            message = "Remember to be nice!";
-        } else if (mDiffInDays == -3) {
-            message = "Bring Home Flowers!";
-        } else if (mDiffInDays == -2) {
-            message = "Bring Home Food!";
-        } else if (mDiffInDays == -1) {
-            message = "Be Very Nice!";
-        } else if (mDiffInDays == 0) {
-            message = "It's that time of the month!";
-        } else if (mDiffInDays == 14) {
-            message = "Pick up some condoms your woman is very fertile!";
-        }*/
     }
 
 }
