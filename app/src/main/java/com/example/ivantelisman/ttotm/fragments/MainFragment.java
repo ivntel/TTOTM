@@ -33,6 +33,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import es.dmoral.toasty.Toasty;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -119,7 +121,7 @@ public class MainFragment extends Fragment {
         mContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().replace(R.id.content, new CalanderFragment(), "calender").commit();
+                navigateToCalenderFragment();
             }
         });
 
@@ -247,18 +249,21 @@ public class MainFragment extends Fragment {
         mDifferenceInDays = mCurrentDayCalender.get(Calendar.DAY_OF_YEAR) - Integer.valueOf(mEstimatedCycleStartDate);
 
         if (cycleDay.equals("0")) {
-            Toast.makeText(getContext(), "Choose a cycle day amount between 24 and 34", Toast.LENGTH_LONG).show();
+            Toasty.error(getContext(), "Choose a cycle day amount between 24 and 34", Toast.LENGTH_LONG, true).show();
         } else if (!mHasBeenClicked) {
-            Toast.makeText(getContext(), "Select A Date From The Calender", Toast.LENGTH_LONG).show();
+            Toasty.error(getContext(), "Select A Date From The Calender", Toast.LENGTH_LONG, true).show();
         } else if (mDateSelected.getTime() > System.currentTimeMillis()) {
-            Toast.makeText(getContext(), "Please Select A Past Date From The Calender", Toast.LENGTH_LONG).show();
+            Toasty.error(getContext(), "Please Select A Past Date From The Calender", Toast.LENGTH_LONG, true).show();
         } else if (mDifferenceInDays >= 0) {
-            Toast.makeText(getContext(), "That Date Is Out Of Possible Ranges!", Toast.LENGTH_LONG).show();
+            Toasty.error(getContext(), "That Date Is Out Of Possible Ranges!", Toast.LENGTH_LONG, true).show();
         } else {
             saveDateDataInDB();
             saveNotificationInfo(Integer.valueOf(mEstimatedCycleStartDate), Integer.valueOf(mEstimatedCycleStartDate) - 1, Integer.valueOf(mEstimatedCycleStartDate) - 2, Integer.valueOf(mEstimatedCycleStartDate) - 3, Integer.valueOf(mEstimatedCycleStartDate) - 4, Integer.valueOf(mEstimatedCycleStartDate) - 14);
-
-            getFragmentManager().beginTransaction().replace(R.id.content, new CalanderFragment(), "calender").commit();
+            navigateToCalenderFragment();
         }
+    }
+
+    private void navigateToCalenderFragment() {
+        getFragmentManager().beginTransaction().replace(R.id.content, new CalanderFragment(), "calender").commit();
     }
 }
