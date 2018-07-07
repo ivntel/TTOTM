@@ -69,18 +69,12 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_main, container, false);
         // Inflate the layout for this fragment
-        mDateTextView = mView.findViewById(R.id.textViewSelectADate);
-        mImageViewCalender = mView.findViewById(R.id.imageViewCalender);
-        mContinueButton = mView.findViewById(R.id.continueButton);
-        mSubmitButton = mView.findViewById(R.id.submit);
-        mCardView = mView.findViewById(R.id.buttonsAndEditTextCard);
-        mSpinnerCycleDays = mView.findViewById(R.id.spinnerCycleLength);
+        mView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        // Note: Db references should not be in an activity.
+        setUpUi();
+        // Db references
         mDb = AppDatabase.getInMemoryDatabase(getContext());
-
         // Get a reference to the ViewModel for this screen.
         mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
@@ -100,6 +94,17 @@ public class MainFragment extends Fragment {
         };
 
         subscribeUiUserDate();
+
+        return mView;
+    }
+
+    private void setUpUi() {
+        mDateTextView = mView.findViewById(R.id.textViewSelectADate);
+        mImageViewCalender = mView.findViewById(R.id.imageViewCalender);
+        mContinueButton = mView.findViewById(R.id.continueButton);
+        mSubmitButton = mView.findViewById(R.id.submit);
+        mCardView = mView.findViewById(R.id.buttonsAndEditTextCard);
+        mSpinnerCycleDays = mView.findViewById(R.id.spinnerCycleLength);
 
         mImageViewCalender.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,8 +129,6 @@ public class MainFragment extends Fragment {
                 navigateToCalenderFragment();
             }
         });
-
-        return mView;
     }
 
     private void updateLabel() {
@@ -208,7 +211,6 @@ public class MainFragment extends Fragment {
                 } else if (i == 11) {
                     cycleDay = "34";
                 }
-
             }
 
             @Override
@@ -231,23 +233,23 @@ public class MainFragment extends Fragment {
         user.estimatedStartDate = mEstimatedDate.toString();
         user.date = mDateSelected.toString();
         mDb.userModel().insertUser(user);
-        PreferenceUtil.getInstance(getContext()).saveDifferenceInDays(mDifferenceInDays);
     }
 
     private void processAndSubmitData() {
+        //set chosen cycle days value
         mCycleDays = Integer.valueOf(cycleDay);
-        //selected date
+        //set selected date as day of year
         mDateSelectedCalendar.setTime(mDateSelected);
         mSelectedDayOfTheYear = mDateSelectedCalendar.get(Calendar.DAY_OF_YEAR);
-        //estimated date
+        //set estimated date as day of year
         mEstimatedDayCalender.setTime(mDateSelected);
         mEstimatedCycleStartDate = String.valueOf(mDateSelectedCalendar.get(Calendar.DAY_OF_YEAR) + mCycleDays);
         //convert mEstimatedCycleStartDate day of year to date format
         mEstimatedDayCalender.set(Calendar.DAY_OF_YEAR, Integer.valueOf(mEstimatedCycleStartDate));
         mEstimatedDate = mEstimatedDayCalender.getTime();
-
+        //set difference of days as int
         mDifferenceInDays = mCurrentDayCalender.get(Calendar.DAY_OF_YEAR) - Integer.valueOf(mEstimatedCycleStartDate);
-
+        //error cases for choosing cycle length
         if (cycleDay.equals("0")) {
             Toasty.error(getContext(), "Choose a cycle day amount between 24 and 34", Toast.LENGTH_LONG, true).show();
         } else if (!mHasBeenClicked) {

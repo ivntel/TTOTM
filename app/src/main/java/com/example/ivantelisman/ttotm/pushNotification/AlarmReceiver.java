@@ -8,7 +8,6 @@ import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 
 import com.example.ivantelisman.ttotm.PreferenceUtil;
@@ -22,7 +21,6 @@ import static android.app.NotificationManager.IMPORTANCE_DEFAULT;
 public class AlarmReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "push_notification";
     private String message = "Default Message";
-    SharedPreferences preferences;
     private Calendar mCurrentDate = Calendar.getInstance();
 
 

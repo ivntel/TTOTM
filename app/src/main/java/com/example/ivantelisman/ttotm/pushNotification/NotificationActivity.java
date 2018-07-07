@@ -14,15 +14,12 @@ import java.util.List;
 
 public class NotificationActivity extends AppCompatActivity {
     TextView notificationMessage;
-    private int mDiffInDays;
     private Calendar mCurrentDate = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-
-        mDiffInDays = PreferenceUtil.getInstance(this).getDifferenceInDays();
 
         notificationMessage = findViewById(R.id.notificationMessage);
         openedNotificationMessage();
@@ -47,7 +44,6 @@ public class NotificationActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        PreferenceUtil.getInstance(this).saveFromNotificationActivityBool(true);
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
     }

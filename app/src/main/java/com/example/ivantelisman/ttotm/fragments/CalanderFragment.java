@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,12 +51,20 @@ public class CalanderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_calander, container, false);
+
+        // Get a reference to the ViewModel for this screen.
+        mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        setUpUi(view);
+
+        return view;
+    }
+
+    private void setUpUi(View view) {
         mCalendarView = view.findViewById(R.id.calender);
         mTextViewInfo = view.findViewById(R.id.info);
         mTextViewDateInfo = view.findViewById(R.id.dateInfo);
-        // Get a reference to the ViewModel for this screen.
-        mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
         subscribeUiUsersDates();
         mInFragment = true;
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -85,20 +92,24 @@ public class CalanderFragment extends Fragment {
                         .setNegativeButton("No", dialogClickListener).show();
             }
         });
-        // Inflate the layout for this fragment
-        return view;
     }
 
     private void subscribeUiUsersDates() {
         mainActivityViewModel.getUsers().observe(this, new Observer<List<User>>() {
             @Override
             public void onChanged(@NonNull final List<User> users) {
-                showDateInUi(users);
+                submitDateInfoListAndShowDateInUi(users);
             }
         });
     }
 
-    private void showDateInUi(final @NonNull List<User> users) {
+    private void submitDateInfoListAndShowDateInUi(final @NonNull List<User> users) {
+        formatDateInfoToBeShownInUi(users);
+        mCalendarView.setDate(mEstimatedDate.getTime());
+        formatDateIntoTextInfoAndShow();
+    }
+
+    private void formatDateInfoToBeShownInUi(List<User> users) {
         mSelectedDateText = users.get(0).date;
         mEstimatedDateText = users.get(0).estimatedStartDate;
         mDiffInDays = users.get(0).differenceInDays;
@@ -111,13 +122,12 @@ public class CalanderFragment extends Fragment {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
 
-        mCalendarView.setDate(mEstimatedDate.getTime());
+    private void formatDateIntoTextInfoAndShow() {
         mCalendarSelectedDate.setTime(mSelectedDate);
-
         mCalendarEstimatedtDate.setTime(mEstimatedDate);
         mDiffInDays = mCalendarCurrentDate.get(Calendar.DAY_OF_YEAR) - mCalendarEstimatedtDate.get(Calendar.DAY_OF_YEAR);
-        Log.d("showDateInUiD: ", String.valueOf(mCalendarCurrentDate.get(Calendar.DAY_OF_YEAR)) + " - " + mEstimatedDate.toString() + " = " + String.valueOf(mDiffInDays));
         String oldString = String.valueOf(mDiffInDays);
         String newString = oldString.replaceAll("-", "");
 
@@ -129,8 +139,10 @@ public class CalanderFragment extends Fragment {
         if (mDiffInDays == -1) {
             mTextViewInfo.setText(newString + " day until the next period!");
         } else if (mDiffInDays == 0) {
+            mTextViewDateInfo.setText("Last period was: " + sdf.format(mSelectedDate) + " Next one should be today: " + sdf.format(mEstimatedDate));
             mTextViewInfo.setText("The period began today!");
         } else if (mDiffInDays > 0) {
+            mTextViewDateInfo.setText("Last period was: " + sdf.format(mSelectedDate) + " Next one has passed and should have been: " + sdf.format(mEstimatedDate));
             mTextViewInfo.setText("Go to the previous screen and select the day that the period began!");
         }
     }

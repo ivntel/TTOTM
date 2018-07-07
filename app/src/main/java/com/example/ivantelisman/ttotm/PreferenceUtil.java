@@ -36,45 +36,6 @@ public class PreferenceUtil {
         this.sharedPreferences = sharedPreferences;
     }
 
-    public void saveDifferenceInDays(int differenceInDays) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("DIFFERENCE_IN_DAYS", differenceInDays);
-        editor.commit();
-    }
-
-    /**
-     * Returns the DifferenceInDays as a int.
-     */
-    public int getDifferenceInDays() {
-        return sharedPreferences.getInt("DIFFERENCE_IN_DAYS", 100);
-    }
-
-    public void saveFromNotificationActivityBool(boolean fromNotificationActivity) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("FROM_NOTIFICATION_ACTIVITY", fromNotificationActivity);
-        editor.commit();
-    }
-
-    /**
-     * Returns the FromNotificationActivityBool as a boolean.
-     */
-    public boolean getFromNotificationActivityBool() {
-        return sharedPreferences.getBoolean("FROM_NOTIFICATION_ACTIVITY", false);
-    }
-
-    public void saveNotificationHasShown(boolean notificationHasShown) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("NOTIFICATION_HAS_SHOWN", notificationHasShown);
-        editor.commit();
-    }
-
-    /**
-     * Returns the NotificationHasShown as a boolean.
-     */
-    public boolean getNotificationHasShown() {
-        return sharedPreferences.getBoolean("NOTIFICATION_HAS_SHOWN", false);
-    }
-
     public void saveNotificationDates(int day0, int day1, int day2, int day3, int day4, int day14) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("DAY_ZERO", day0);
@@ -87,7 +48,7 @@ public class PreferenceUtil {
     }
 
     /**
-     * Returns the NotificationHasShown as a boolean.
+     * Returns the cycle days info as a list.
      */
     public List<Integer> getNotificationDates() {
         int day0 = sharedPreferences.getInt("DAY_ZERO", 0);

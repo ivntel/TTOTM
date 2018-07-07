@@ -51,18 +51,7 @@ public class DatabaseInitializer {
 
     private static void populateWithTestData(AppDatabase db) {
         db.userModel().deleteAll();
-
-        //User user1 = addUser(db, "1", "Jason", "Seaver", 40, "");
-        //User user2 = addUser(db, "2", "Mike", "Seaver", 12, "");
-        //User user3 = addUser(db, "3", "Bill", "Johnson", 40, "");
-        //addUser(db, "4", "Carol", "Seaver", 15, "");
     }
-
-    /*private static Date getTodayPlusDays(int daysAgo) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, daysAgo);
-        return calendar.getTime();
-    }*/
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
