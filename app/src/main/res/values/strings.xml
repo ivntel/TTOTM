@@ -1,7 +1,41 @@
 <resources>
     <string name="app_name">TTOTM</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="bring_home_flowers">Bring Home Flowers Today</string>
+    <!-- Dialog info -->
+    <string name="select_new_date">Select a new period start date?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <!-- Main Fragment -->
+    <string name="click_calender">CLICK THE CALENDER AND SELECT THE DATE THE LAST PERIOD BEGAN</string>
+    <string name="date_last_period">DATE THE LAST PERIOD BEGAN:</string>
+    <string name="choose_between">Choose a cycle day amount between 24 and 34</string>
+    <string name="select_date_from_calender">Select A Date From The Calender</string>
+    <string name="select_past_date_from_calender">Please Select A Past Date From The Calender</string>
+    <string name="date_out_of_range">That Date Is Out Of Possible Ranges!</string>
+    <string name="estimates_start_date">ESTIMATED START DATE OF THE NEXT PERIOD:</string>
+    <string name="last_has_come">IF THE LATEST PERIOD HAS COME CLICK THE CALENDER AND SELECT THE DATE IT BEGAN</string>
+    <!-- Notification Activity -->
+    <string name="day_14_extended">Condoms are your friend. Your lady is midcycle which means she is probably ovulating right about now. If you don not want kiddos wrap it up.</string>
+    <string name="day_4_extended">Compliments make the world go round. She is starting to feel crabby, her skin is breaking out, and you are annoying her just by breathing. Do not forget to give her compliments even if she is being a bitch.</string>
+    <string name="day_3_extended">Day 3</string>
+    <string name="day_2_extended">Day 2</string>
+    <string name="day_1_extended">Flowers or sweets. She does not feel good today. She is bloated, cranky, and likely has a headache. A little treat might mean the difference between tears or smiles.</string>
+    <string name="day_0_extended">Bring home dinner. She does not want to cook, she does not want to clean up after dinner. Pick up her favorite takeout and rub her back after dinner.</string>
+    <!-- Calender Fragment -->
+    <string name="last_period_was">Last period was: </string>
+    <string name="days_until"> days until the next period!</string>
+    <string name="day_until"> day until the next period!</string>
+    <string name="began_today">The period began today!</string>
+    <string name="next_one_should"> Next one should be: </string>
+    <string name="next_one_today"> Next one should be today: </string>
+    <string name="next_one_passed"> Next one has passed and should have been: </string>
+    <string name="go_to_previous_screen">Go to the previous screen and select the day that the period began!</string>
+    <!-- Alarm Receiver -->
+    <string name="notification">That Time Of The Month Notification</string>
+    <string name="new_alert">New Message Alert!</string>
+    <string name="day_14">14 days until the next period</string>
+    <string name="day_4">4 days until the next period</string>
+    <string name="day_3">3 days until the next period</string>
+    <string name="day_2">2 days until the next period</string>
+    <string name="day_1">1 day until the next period</string>
+    <string name="day_0">Today the period begins</string>
 </resources>

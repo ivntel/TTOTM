@@ -88,8 +88,8 @@ public class CalanderFragment extends Fragment {
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setMessage("Select a new period start date?").setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).show();
+                builder.setMessage(getString(R.string.select_new_date)).setPositiveButton(getString(R.string.yes), dialogClickListener)
+                        .setNegativeButton(getString(R.string.no), dialogClickListener).show();
             }
         });
     }
@@ -134,16 +134,16 @@ public class CalanderFragment extends Fragment {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-        mTextViewDateInfo.setText("Last period was: " + sdf.format(mSelectedDate) + " Next one should be: " + sdf.format(mEstimatedDate));
-        mTextViewInfo.setText(newString + " days until the next period!");
+        mTextViewDateInfo.setText(getString(R.string.last_period_was) + sdf.format(mSelectedDate) + getString(R.string.next_one_should) + sdf.format(mEstimatedDate));
+        mTextViewInfo.setText(newString + getString(R.string.days_until));
         if (mDiffInDays == -1) {
-            mTextViewInfo.setText(newString + " day until the next period!");
+            mTextViewInfo.setText(newString + getString(R.string.day_until));
         } else if (mDiffInDays == 0) {
-            mTextViewDateInfo.setText("Last period was: " + sdf.format(mSelectedDate) + " Next one should be today: " + sdf.format(mEstimatedDate));
-            mTextViewInfo.setText("The period began today!");
+            mTextViewDateInfo.setText(getString(R.string.last_period_was) + sdf.format(mSelectedDate) + getString(R.string.next_one_today) + sdf.format(mEstimatedDate));
+            mTextViewInfo.setText(getString(R.string.began_today));
         } else if (mDiffInDays > 0) {
-            mTextViewDateInfo.setText("Last period was: " + sdf.format(mSelectedDate) + " Next one has passed and should have been: " + sdf.format(mEstimatedDate));
-            mTextViewInfo.setText("Go to the previous screen and select the day that the period began!");
+            mTextViewDateInfo.setText(getString(R.string.last_period_was) + sdf.format(mSelectedDate) + getString(R.string.next_one_passed) + sdf.format(mEstimatedDate));
+            mTextViewInfo.setText(getString(R.string.go_to_previous_screen));
         }
     }
 

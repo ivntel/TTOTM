@@ -1,9 +1,11 @@
 package com.example.ivantelisman.ttotm.fragments;
 
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -109,10 +111,28 @@ public class MainFragment extends Fragment {
         mImageViewCalender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHasBeenClicked = true;
-                new DatePickerDialog(getContext(), mDate, mDateSelectedCalendar
-                        .get(Calendar.YEAR), mDateSelectedCalendar.get(Calendar.MONTH),
-                        mDateSelectedCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                mHasBeenClicked = true;
+                                new DatePickerDialog(getContext(), mDate, mDateSelectedCalendar
+                                        .get(Calendar.YEAR), mDateSelectedCalendar.get(Calendar.MONTH),
+                                        mDateSelectedCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setMessage(getString(R.string.select_new_date)).setPositiveButton(getString(R.string.yes), dialogClickListener)
+                        .setNegativeButton(getString(R.string.no), dialogClickListener).show();
+
             }
         });
 
@@ -154,13 +174,13 @@ public class MainFragment extends Fragment {
                     mDateSelected = dateFormat.parse(users.get(0).date);
                     mEstimatedDate = dateFormat.parse(users.get(0).estimatedStartDate);
                     //ui changes
-                    mDateTextView.setText("DATE THE LAST PERIOD BEGAN:\n" + /*users.get(0).date*/sdf.format(mDateSelected) + "\n\nESTIMATED START DATE OF THE NEXT PERIOD:\n" + sdf.format(mEstimatedDate) + "\n\nIF THE LATEST PERIOD HAS COME CLICK THE CALENDER AND SELECT THE DATE IT BEGAN");
+                    mDateTextView.setText(getString(R.string.date_last_period) + "\n" + sdf.format(mDateSelected) + "\n\n" + getString(R.string.estimates_start_date) + "\n" + sdf.format(mEstimatedDate) + "\n\n" + getString(R.string.last_has_come));
                     mSubmitButton.setVisibility(View.GONE);
                     mSpinnerCycleDays.setVisibility(View.GONE);
                     mCardView.setVisibility(View.GONE);
                 } catch (Exception e){
                     //ui changes
-                    mDateTextView.setText("CLICK THE CALENDER AND SELECT THE DATE THE LAST PERIOD BEGAN");
+                    mDateTextView.setText(getString(R.string.click_calender));
                     mContinueButton.setVisibility(View.GONE);
                     mCardView.setVisibility(View.GONE);
                 }
@@ -251,13 +271,13 @@ public class MainFragment extends Fragment {
         mDifferenceInDays = mCurrentDayCalender.get(Calendar.DAY_OF_YEAR) - Integer.valueOf(mEstimatedCycleStartDate);
         //error cases for choosing cycle length
         if (cycleDay.equals("0")) {
-            Toasty.error(getContext(), "Choose a cycle day amount between 24 and 34", Toast.LENGTH_LONG, true).show();
+            Toasty.error(getContext(), getString(R.string.choose_between), Toast.LENGTH_LONG, true).show();
         } else if (!mHasBeenClicked) {
-            Toasty.error(getContext(), "Select A Date From The Calender", Toast.LENGTH_LONG, true).show();
+            Toasty.error(getContext(), getString(R.string.select_date_from_calender), Toast.LENGTH_LONG, true).show();
         } else if (mDateSelected.getTime() > System.currentTimeMillis()) {
-            Toasty.error(getContext(), "Please Select A Past Date From The Calender", Toast.LENGTH_LONG, true).show();
+            Toasty.error(getContext(), getString(R.string.select_past_date_from_calender), Toast.LENGTH_LONG, true).show();
         } else if (mDifferenceInDays >= 0) {
-            Toasty.error(getContext(), "That Date Is Out Of Possible Ranges!", Toast.LENGTH_LONG, true).show();
+            Toasty.error(getContext(), getString(R.string.date_out_of_range), Toast.LENGTH_LONG, true).show();
         } else {
             saveDateDataInDB();
             saveNotificationInfo(Integer.valueOf(mEstimatedCycleStartDate), Integer.valueOf(mEstimatedCycleStartDate) - 1, Integer.valueOf(mEstimatedCycleStartDate) - 2, Integer.valueOf(mEstimatedCycleStartDate) - 3, Integer.valueOf(mEstimatedCycleStartDate) - 4, Integer.valueOf(mEstimatedCycleStartDate) - 14);

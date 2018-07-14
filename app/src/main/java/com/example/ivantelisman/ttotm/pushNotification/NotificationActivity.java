@@ -28,17 +28,17 @@ public class NotificationActivity extends AppCompatActivity {
     private void openedNotificationMessage(){
         List<Integer> daysList = PreferenceUtil.getInstance(this).getNotificationDates();
         if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(4)) {
-            notificationMessage.setText("4");
+            notificationMessage.setText(getString(R.string.day_4_extended));
         } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(3)) {
-            notificationMessage.setText("3");
+            notificationMessage.setText(getString(R.string.day_3_extended));
         } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(2)) {
-            notificationMessage.setText("2");
+            notificationMessage.setText(getString(R.string.day_2_extended));
         } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(1)) {
-            notificationMessage.setText("1");
+            notificationMessage.setText(getString(R.string.day_1_extended));
         } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(0)) {
-            notificationMessage.setText("0");
+            notificationMessage.setText(getString(R.string.day_0_extended));
         } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(5)) {
-            notificationMessage.setText("14");
+            notificationMessage.setText(getString(R.string.day_14_extended));
         }
     }
 

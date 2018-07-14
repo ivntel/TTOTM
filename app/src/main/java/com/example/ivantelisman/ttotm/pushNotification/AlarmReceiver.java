@@ -38,9 +38,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         setUpMessage(context);
 
-            Notification notification = builder.setContentTitle("That Time Of The Month Notification")
+        Notification notification = builder.setContentTitle(context.getResources().getString(R.string.notification))
                     .setContentText(message)
-                    .setTicker("New Message Alert!")
+                .setTicker(context.getResources().getString(R.string.new_alert))
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentIntent(pendingIntent).build();
 
@@ -65,17 +65,17 @@ public class AlarmReceiver extends BroadcastReceiver {
     private void setUpMessage(Context context) {
         List<Integer> daysList = PreferenceUtil.getInstance(context).getNotificationDates();
         if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(4)) {
-            message = "Remember to be nice!";
+            message = context.getResources().getString(R.string.day_4);
         } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(3)) {
-            message = "Bring Home Flowers!";
+            message = context.getResources().getString(R.string.day_3);
         } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(2)) {
-            message = "Bring Home Food!";
+            message = context.getResources().getString(R.string.day_2);
         } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(1)) {
-            message = "Be Very Nice!";
+            message = context.getResources().getString(R.string.day_1);
         } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(0)) {
-            message = "It's that time of the month!";
+            message = context.getResources().getString(R.string.day_0);
         } else if (mCurrentDate.get(Calendar.DAY_OF_YEAR) == daysList.get(5)) {
-            message = "Pick up some condoms your woman is very fertile!";
+            message = context.getResources().getString(R.string.day_14);
         }
     }
 
