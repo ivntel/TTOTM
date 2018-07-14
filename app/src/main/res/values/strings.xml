@@ -38,4 +38,5 @@
     <string name="day_2">2 days until the next period</string>
     <string name="day_1">1 day until the next period</string>
     <string name="day_0">Today the period begins</string>
+    <string name="link">A helpful link for you</string>
 </resources>
