@@ -104,11 +104,11 @@ public class MainActivity extends AppCompatActivity {
         List<Integer> daysList = PreferenceUtil.getInstance(this).getNotificationDates();
         mDay0Calender.set(Calendar.DAY_OF_YEAR, daysList.get(0));
         mDay0Calender.set(Calendar.HOUR_OF_DAY, 15);
-        mDay0Calender.set(Calendar.MINUTE, 02);
+        mDay0Calender.set(Calendar.MINUTE, 00);
         mDay0Calender.set(Calendar.SECOND, 00);
         mDay1Calender.set(Calendar.DAY_OF_YEAR, daysList.get(1));
         mDay1Calender.set(Calendar.HOUR_OF_DAY, 15);
-        mDay1Calender.set(Calendar.MINUTE, 02);
+        mDay1Calender.set(Calendar.MINUTE, 00);
         mDay1Calender.set(Calendar.SECOND, 00);
         mDay2Calender.set(Calendar.DAY_OF_YEAR, daysList.get(2));
         mDay2Calender.set(Calendar.HOUR_OF_DAY, 15);

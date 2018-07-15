@@ -32,11 +32,11 @@
     <!-- Alarm Receiver -->
     <string name="notification">That Time Of The Month Notification</string>
     <string name="new_alert">New Message Alert!</string>
-    <string name="day_14">14 days until the next period</string>
-    <string name="day_4">4 days until the next period</string>
-    <string name="day_3">3 days until the next period</string>
-    <string name="day_2">2 days until the next period</string>
-    <string name="day_1">1 day until the next period</string>
-    <string name="day_0">Today the period begins</string>
-    <string name="link">A helpful link for you</string>
+    <string name="day_14">14 days until the next period!</string>
+    <string name="day_4">4 days until the next period!</string>
+    <string name="day_3">3 days until the next period!</string>
+    <string name="day_2">2 days until the next period!</string>
+    <string name="day_1">1 day until the next period!</string>
+    <string name="day_0">Today the period begins!</string>
+    <string name="link">A HELPFUL LINK => CLICK HERE</string>
 </resources>

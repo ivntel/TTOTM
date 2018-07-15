@@ -134,15 +134,15 @@ public class CalanderFragment extends Fragment {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-        mTextViewDateInfo.setText(getString(R.string.last_period_was) + sdf.format(mSelectedDate) + getString(R.string.next_one_should) + sdf.format(mEstimatedDate));
-        mTextViewInfo.setText(newString + getString(R.string.days_until));
+        mTextViewDateInfo.setText(getString(R.string.last_period_was) + " " + sdf.format(mSelectedDate) + " " + getString(R.string.next_one_should) + " " + sdf.format(mEstimatedDate));
+        mTextViewInfo.setText(newString + " " + getString(R.string.days_until));
         if (mDiffInDays == -1) {
-            mTextViewInfo.setText(newString + getString(R.string.day_until));
+            mTextViewInfo.setText(newString + " " + getString(R.string.day_until));
         } else if (mDiffInDays == 0) {
-            mTextViewDateInfo.setText(getString(R.string.last_period_was) + sdf.format(mSelectedDate) + getString(R.string.next_one_today) + sdf.format(mEstimatedDate));
+            mTextViewDateInfo.setText(getString(R.string.last_period_was) + " " + sdf.format(mSelectedDate) + " " + getString(R.string.next_one_today) + " " + sdf.format(mEstimatedDate));
             mTextViewInfo.setText(getString(R.string.began_today));
         } else if (mDiffInDays > 0) {
-            mTextViewDateInfo.setText(getString(R.string.last_period_was) + sdf.format(mSelectedDate) + getString(R.string.next_one_passed) + sdf.format(mEstimatedDate));
+            mTextViewDateInfo.setText(getString(R.string.last_period_was) + " " + sdf.format(mSelectedDate) + " " + getString(R.string.next_one_passed) + " " + sdf.format(mEstimatedDate));
             mTextViewInfo.setText(getString(R.string.go_to_previous_screen));
         }
     }
