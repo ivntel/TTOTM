@@ -37,7 +37,6 @@ import java.util.Locale;
 
 import es.dmoral.toasty.Toasty;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
