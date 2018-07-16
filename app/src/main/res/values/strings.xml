@@ -20,6 +20,8 @@
     <string name="day_2_extended">Day 2</string>
     <string name="day_1_extended">Flowers or sweets. She does not feel good today. She is bloated, cranky, and likely has a headache. A little treat might mean the difference between tears or smiles.</string>
     <string name="day_0_extended">Bring home dinner. She does not want to cook, she does not want to clean up after dinner. Pick up her favorite takeout and rub her back after dinner.</string>
+    <string name="link">A HELPFUL LINK. CLICK HERE</string>
+    <string name="dummy_info">This is dummy info, this is dummy info, this is dummy info, this is dummy info, this is dummy info, this is dummy info.</string>
     <!-- Calender Fragment -->
     <string name="last_period_was">Last period was: </string>
     <string name="days_until"> days until the next period!</string>
@@ -38,5 +40,4 @@
     <string name="day_2">2 days until the next period!</string>
     <string name="day_1">1 day until the next period!</string>
     <string name="day_0">Today the period begins!</string>
-    <string name="link">A HELPFUL LINK => CLICK HERE</string>
 </resources>

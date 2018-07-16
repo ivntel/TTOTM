@@ -34,29 +34,11 @@ public interface UserDao {
     @Query("select * from user where id = :id")
     User loadUserById(int id);
 
-    @Query("select * from user where differenceInDays = :firstName and cycleDuration = :lastName")
-    List<User> findUserByNameAndLastName(String firstName, String lastName);
-
     @Insert(onConflict = IGNORE)
     void insertUser(User user);
 
     @Delete
     void deleteUser(User user);
-
-    @Query("delete from user where differenceInDays like :badName OR cycleDuration like :badName")
-    int deleteUsersByName(String badName);
-
-    @Insert(onConflict = IGNORE)
-    void insertOrReplaceUsers(User... users);
-
-    @Delete
-    void deleteUsers(User user1, User user2);
-
-    @Query("SELECT * FROM User WHERE cycleDuration == :age")
-    LiveData<List<User>> findUsersUserByCycleDuration(int age);
-
-    @Query("SELECT * FROM User WHERE cycleDuration < :age")
-    List<User> findUsersYoungerThanSolution(int age);
 
     @Query("DELETE FROM User")
     void deleteAll();

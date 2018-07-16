@@ -136,6 +136,7 @@ public class CalanderFragment extends Fragment {
 
         mTextViewDateInfo.setText(getString(R.string.last_period_was) + " " + sdf.format(mSelectedDate) + " " + getString(R.string.next_one_should) + " " + sdf.format(mEstimatedDate));
         mTextViewInfo.setText(newString + " " + getString(R.string.days_until));
+
         if (mDiffInDays == -1) {
             mTextViewInfo.setText(newString + " " + getString(R.string.day_until));
         } else if (mDiffInDays == 0) {
